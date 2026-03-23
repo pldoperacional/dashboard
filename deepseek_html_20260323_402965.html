@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard PLD & FinCrime</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --background: hsl(220,20%,96%); --foreground: hsl(215,30%,15%);
+  --card: hsl(0,0%,100%); --card-fg: hsl(215,30%,15%);
+  --primary: hsl(215,50%,23%); --primary-fg: hsl(210,40%,98%);
+  --muted: hsl(215,20%,92%); --muted-fg: hsl(215,15%,47%);
+  --border: hsl(215,25%,90%);
+  --risk-high: hsl(0,78%,47%); --risk-high-bg: hsl(0,100%,90%);
+  --risk-med: hsl(38,95%,50%); --risk-med-bg: hsl(48,100%,90%);
+  --risk-low: hsl(142,65%,36%); --risk-low-bg: hsl(142,76%,90%);
+  --coaf: hsl(263,72%,56%); --coaf-bg: hsl(263,100%,90%);
+  --status-open: hsl(217,92%,58%); --status-open-bg: hsl(217,100%,90%);
+  --status-done: hsl(142,60%,38%); --status-done-bg: hsl(142,76%,90%);
+  --sla-warning: hsl(38,95%,50%);
+  --sla-critical: hsl(0,78%,47%);
+  --radius: 0.75rem;
+
+  --link-color: hsl(215, 80%, 44%);
+  --link-hover: hsl(215, 85%, 38%);
+
+  --btn-clear-all-bg: hsl(215, 85%, 94%);
+  --btn-clear-all-fg: hsl(215, 50%, 28%);
+  --btn-clear-dates-bg: hsl(26, 100%, 94%);
+  --btn-clear-dates-fg: hsl(26, 70%, 30%);
+  --btn-hover-shadow: 0 1px 2px rgba(0,0,0,.05);}
+body{font-family:'Inter',sans-serif;background:var(--background);color:var(--foreground);-webkit-font-smoothing:antialiased}
+.container{max-width:1400px;margin:0 auto;padding:0 1rem}
+header{background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:1rem 0;flex-wrap:wrap;gap:0.5rem}
+.logo{width:36px;height:36px;border-radius:8px;background:var(--primary);display:flex;align-items:center;justify-content:center;color:var(--primary-fg)}
+h1{font-size:1.125rem;font-weight:700} .subtitle{font-size:0.75rem;color:var(--muted-fg)}
+main{padding:1.5rem 0}main>*+*{margin-top:1.5rem}
+
+/* Upload */
+.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:2rem;text-align:center;cursor:pointer;transition:all .2s}
+.upload-zone:hover{border-color:var(--link-color);background:hsla(215,50%,23%,0.05)}
+
+/* Sharepoint URL Section */
+.sharepoint-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.sharepoint-input-group {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.sharepoint-input-group input {
+  flex: 1;
+  min-width: 300px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 0.75rem;
+  font-size: 0.8rem;
+  background: var(--card);
+  outline: none;
+}
+.sharepoint-input-group input:focus {
+  border-color: var(--link-color);
+}
+.sharepoint-input-group button {
+  height: 40px;
+  padding: 0 1.25rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: var(--primary);
+  color: var(--primary-fg);
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.sharepoint-input-group button:hover {
+  opacity: 0.9;
+}
+.sharepoint-input-group button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.sharepoint-status {
+  font-size: 0.7rem;
+  margin-top: 0.5rem;
+  color: var(--muted-fg);
+}
+.sharepoint-status.error {
+  color: var(--risk-high);
+}
+.sharepoint-status.success {
+  color: var(--risk-low);
+}
+
+/* Filters */
+.filters{display:flex;gap:0.75rem;flex-wrap:wrap}
+.filter-select,.filter-input{height:36px;border:1px solid var(--border);border-radius:8px;padding:0 0.75rem;font-size:0.75rem;background:var(--card);outline:none}
+.filter-select:focus,.filter-input:focus{border-color:var(--link-color)}
+
+/* KPIs */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem}
+.kpi-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:0.4rem;
+  text-align:center;
+  transition:transform .18s ease, box-shadow .18s ease;
+  will-change:transform;
+}
+.kpi-card:hover, .kpi-card:focus-within{
+  transform:translateY(-2px) scale(1.02);
+}
+.kpi-value{font-size:1.875rem;font-weight:800;letter-spacing:-0.025em}
+.kpi-label{font-size:0.75rem;color:var(--muted-fg);margin-top:0.25rem;font-weight:500}
+
+/* Charts */
+.charts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+@media(max-width:768px){.charts-grid{grid-template-columns:1fr}}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:0.4rem;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.chart-card.span-2{grid-column:span 2}
+@media(max-width:768px){.chart-card.span-2{grid-column:span 1}}
+.chart-title{font-size:0.875rem;font-weight:600;margin-bottom:1rem}
+
+/* SLA Alert Panel */
+.sla-alerts-panel{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1rem}
+.sla-alert-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:0.4rem;overflow:hidden}
+.sla-alert-title{font-size:0.875rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:0.5rem}
+.sla-alert-title svg{width:18px;height:18px;stroke-width:1.8}
+.sla-alert-list{max-height:300px;overflow-y:auto;font-size:0.75rem}
+.sla-alert-item{padding:0.5rem;border-bottom:1px solid var(--muted);display:flex;justify-content:space-between;align-items:center;gap:0.5rem;flex-wrap:wrap}
+.sla-alert-item:hover{background:var(--muted);border-radius:6px}
+.sla-critical{background:hsla(0,78%,47%,0.1);border-left:3px solid var(--risk-high)}
+.sla-warning{background:hsla(38,95%,50%,0.1);border-left:3px solid var(--risk-med)}
+.empty-message{text-align:center;color:var(--muted-fg);padding:1rem;font-style:italic}
+.badge-sla-days{font-size:0.65rem;padding:2px 6px;border-radius:12px;background:var(--muted);color:var(--muted-fg);cursor:help}
+.badge-sla-critical{background:var(--risk-high);color:white}
+.badge-sla-warning{background:var(--risk-med);color:white}
+
+@media (max-width: 768px){
+  .sla-alerts-panel{grid-template-columns:1fr}
+}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;padding:2px 10px;border-radius:9999px;font-size:0.75rem;font-weight:600;cursor:help}
+.badge-risk-high{background:var(--risk-high-bg);color:var(--risk-high)}
+.badge-risk-med{background:var(--risk-med-bg);color:var(--risk-med)}
+.badge-risk-low{background:var(--risk-low-bg);color:var(--risk-low)}
+.badge-coaf{background:var(--coaf-bg);color:var(--coaf)}
+.badge-status-open{background:var(--status-open-bg);color:var(--status-open)}
+.badge-status-done{background:var(--status-done-bg);color:var(--status-done)}
+
+/* Table */
+.table-wrap{overflow-x:auto;overflow-y:visible}
+table.data-table{width:100%;font-size:0.75rem;border-collapse:collapse;table-layout:auto}
+.data-table th{text-align:left;padding:0.625rem 0.75rem;color:var(--muted-fg);font-weight:500;border-bottom:1px solid var(--border);cursor:pointer;white-space:nowrap;user-select:none}
+.data-table th:hover{color:var(--foreground)}
+.data-table td{padding:0.5rem 0.75rem;border-bottom:1px solid var(--muted);white-space:normal;word-break:break-word}
+.data-table tr:hover td{background:hsla(215,20%,92%,0.5)}
+.mono-id{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--link-color);white-space:nowrap}
+
+@media (max-width: 1200px) {
+  .data-table th, .data-table td {padding: 0.5rem 0.5rem;font-size: 0.7rem;}
+}
+@media (max-width: 768px) {
+  .data-table th, .data-table td {padding: 0.4rem 0.4rem;font-size: 0.65rem;}
+}
+
+.pagination{display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;color:var(--muted-fg)}
+.pagination button{border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:0.75rem;background:var(--card);cursor:pointer}
+.pagination button:disabled{opacity:0.3;cursor:default}
+
+.person-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:0.75rem;margin-bottom:1rem}
+.mini-kpi{border:1px solid var(--border);border-radius:8px;padding:0.75rem;text-align:center}
+.mini-kpi .val{font-size:1.125rem;font-weight:700}
+.mini-kpi .lbl{font-size:0.75rem;color:var(--muted-fg);margin-top:2px}
+.expanded-cases{background:hsla(215,20%,92%,0.3);padding:0.75rem;margin:0 0.5rem 0.5rem;border-radius:8px}
+
+footer{border-top:1px solid var(--border);padding:1rem 0 2rem;text-align:center;font-size:0.75rem;color:var(--muted-fg)}
+
+[data-theme='dark'] {
+  --background: hsl(220,15%,12%);
+  --foreground: hsl(220,15%,92%);
+  --card: hsl(220,15%,16%);
+  --card-fg: hsl(220,15%,92%);
+  --muted: hsl(220,10%,22%);
+  --muted-fg: hsl(220,10%,70%);
+  --border: hsl(220,10%,28%);
+  --link-color: hsl(215, 85%, 72%);
+  --link-hover: hsl(215, 90%, 78%);
+  --btn-clear-all-bg: hsl(215, 25%, 22%);
+  --btn-clear-all-fg: hsl(215, 80%, 85%);
+  --btn-clear-dates-bg: hsl(26, 35%, 24%);
+  --btn-clear-dates-fg: hsl(26, 85%, 85%);
+  --btn-hover-shadow: 0 1px 2px rgba(0,0,0,.35);}
+[data-theme='dark'] .expanded-cases { background: var(--card); }
+
+.btn-mono{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--muted-fg);cursor:pointer}
+.btn-mono:hover{color:var(--foreground)}
+
+[data-theme='dark'] body {background: var(--background);color: var(--foreground);}
+[data-theme='dark'] h1,[data-theme='dark'] h2,[data-theme='dark'] h3,[data-theme='dark'] h4,[data-theme='dark'] .chart-title {color: var(--foreground);}
+[data-theme='dark'] .kpi-value {color: var(--foreground);}
+[data-theme='dark'] .kpi-label,[data-theme='dark'] .subtitle {color: var(--muted-fg);}
+[data-theme='dark'] table.data-table td {color: var(--foreground);}
+[data-theme='dark'] table.data-table th {color: var(--muted-fg);}
+[data-theme='dark'] .filter-input,[data-theme='dark'] .filter-select {color: var(--foreground);background: var(--card);}
+[data-theme='dark'] .badge {color: var(--foreground) !important;border-color: var(--muted-fg);}
+[data-theme='dark'] .badge-risk-high { color: var(--risk-high) !important; }
+[data-theme='dark'] .badge-risk-med  { color: var(--risk-med) !important; }
+[data-theme='dark'] .badge-risk-low  { color: var(--risk-low) !important; }
+[data-theme='dark'] .badge-coaf      { color: var(--coaf) !important; }
+[data-theme='dark'] .badge-status-open { color: var(--status-open) !important; }
+[data-theme='dark'] .badge-status-done { color: var(--status-done) !important; }
+
+a, a:visited {color: var(--link-color);}
+a:hover {color: var(--link-hover);}
+.data-table a {color: var(--link-color);}
+
+#btnClearFilters, #btnClearDates {height:36px; padding:0 0.75rem; border-radius:8px; font-size:0.75rem;border:1px solid var(--border); cursor:pointer;}
+#btnClearFilters {background: var(--btn-clear-all-bg); color: var(--btn-clear-all-fg);}
+#btnClearDates {background: var(--btn-clear-dates-bg); color: var(--btn-clear-dates-fg);}
+#btnClearFilters:hover, #btnClearDates:hover {box-shadow: var(--btn-hover-shadow); filter: brightness(0.98);}
+
+.badge { border-width: 1px; border-style: solid; }
+.badge-risk-high { border-color: color-mix(in oklab, var(--risk-high) 45%, transparent); }
+.badge-risk-med  { border-color: color-mix(in oklab, var(--risk-med) 45%, transparent); }
+.badge-risk-low  { border-color: color-mix(in oklab, var(--risk-low) 45%, transparent); }
+.badge-coaf      { border-color: color-mix(in oklab, var(--coaf) 45%, transparent); }
+.badge-status-open { border-color: color-mix(in oklab, var(--status-open) 45%, transparent); }
+.badge-status-done { border-color: color-mix(in oklab, var(--status-done) 45%, transparent); }
+
+[data-theme='dark'] .badge-risk-high { background: hsla(0, 100%, 60%, 0.22); }
+[data-theme='dark'] .badge-risk-med  { background: hsla(48,100%, 55%, 0.22); }
+[data-theme='dark'] .badge-risk-low  { background: hsla(142,70%, 45%, 0.22); }
+[data-theme='dark'] .badge-coaf      { background: hsla(263,85%, 65%, 0.22); }
+[data-theme='dark'] .badge-status-open { background: hsla(217,85%, 62%, 0.22); }
+[data-theme='dark'] .badge-status-done { background: hsla(142,70%, 45%, 0.22); }
+
+.badge{ border: none !important; transition: box-shadow .18s ease, text-shadow .18s ease; }
+.badge:hover{ text-shadow: 0 0 6px currentColor, 0 0 14px currentColor; box-shadow: 0 0 18px color-mix(in oklab, currentColor 35%, transparent); }
+[data-theme='dark'] .badge-risk-high   { color: color-mix(in oklab, var(--risk-high) 70%,  white 30%) !important; }
+[data-theme='dark'] .badge-risk-med    { color: color-mix(in oklab, var(--risk-med) 70%,   white 30%) !important; }
+[data-theme='dark'] .badge-risk-low    { color: color-mix(in oklab, var(--risk-low) 70%,   white 30%) !important; }
+[data-theme='dark'] .badge-coaf        { color: color-mix(in oklab, var(--coaf) 70%,       white 30%) !important; }
+[data-theme='dark'] .badge-status-open { color: color-mix(in oklab, var(--status-open) 70%,white 30%) !important; }
+[data-theme='dark'] .badge-status-done { color: color-mix(in oklab, var(--status-done) 70%,white 30%) !important; }
+
+[data-theme='dark'] .data-table tr:hover td{background: hsla(220, 10%, 22%, 0.55);}
+
+/* ===== SCROLLBAR STYLES - DARK MODE ===== */
+[data-theme='dark'] ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+[data-theme='dark'] ::-webkit-scrollbar-track {
+  background: var(--muted);
+  border-radius: 6px;
+}
+[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background: var(--muted-fg);
+  border-radius: 6px;
+}
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+  background: var(--link-color);
+}
+[data-theme='dark'] * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-fg) var(--muted);
+}
+
+/* Estilo para a linha expandida */
+.expanded-row td {
+  background-color: var(--muted) !important;
+  border-bottom: 1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="container header-inner">
+  <div style="display:flex;align-items:center;gap:0.75rem">
+    <div class="logo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+    </div>
+    <div><h1>Dashboard PLD & FinCrime</h1><p class="subtitle">Monitoramento Operacional</p></div>
+  </div>
+  
+  <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+    <input type="text" id="globalSearch" class="filter-input" style="min-width:260px" placeholder="Buscar geral...">
+    <button id="themeToggle" class="filter-input" style="cursor:pointer;min-width:110px">🌙 Dark mode</button>
+  </div>
+
+  <span class="subtitle" id="dateDisplay"></span>
+</div>
+</header>
+
+<main class="container">
+  <!-- NOVA SEÇÃO: CARREGAR DO SHAREPOINT -->
+  <div class="sharepoint-section">
+    <div class="sharepoint-input-group">
+      <input type="text" id="sharepointUrl" placeholder="Cole o link da planilha do SharePoint (ex: https://.../Pasta%202.xlsx)">
+      <button id="loadSharepointBtn">📎 Carregar do SharePoint</button>
+    </div>
+    <div id="sharepointStatus" class="sharepoint-status">Cole o link da planilha e clique em carregar. (Você precisa estar autenticado no SharePoint)</div>
+  </div>
+
+  <div class="upload-zone" id="uploadZone" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 0.75rem;display:block;color:var(--muted-fg)">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+      <polyline points="17 8 12 3 7 8"/>
+      <line x1="12" y1="3" x2="12" y2="15"/>
+    </svg>
+    <p style="font-size:0.875rem;font-weight:600">Carregar planilha</p>
+    <p style="font-size:0.75rem;color:var(--muted-fg);margin-top:0.25rem">Arraste ou clique para atualizar (formato .xlsx do Jira)</p>
+    <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none">
+  </div>
+
+  <div id="filtersSection" class="filters" style="display:none"></div>
+  <div id="dateFilters" class="filters" style="display:none;margin-top:0.75rem"></div>
+
+  <div id="slaAlertsPanel" class="sla-alerts-panel" style="display:none"></div>
+
+  <div id="kpiGrid" class="kpi-grid"></div>
+  <div id="chartsGrid" class="charts-grid"></div>
+  <div id="personPanel" class="chart-card" style="display:none"></div>
+  <div id="tablePanel" class="chart-card" style="display:none"></div>
+
+  <footer>Desenvolvido por Leandro Ferreira (2026) — Uso interno</footer>
+</main>
+
+<script>
+// ==================== TYPES & CONSTANTS ====================
+const OPEN_STATUSES = ["Novo","Work in progress","Em Análise","Aguardando Retorno Diligências","Em Espera","Pendente","Comitê","Preparação","Aprovação","Aprovação Gestão Compliance"];
+const COAF_STATUSES = ["Comunicação COAF","Comunicado"];
+const TIPO_COLORS = {
+  'Alerta PLD':'hsl(215,35%,62%)',
+  'KYP / Background Check':'hsl(38,45%,62%)',
+  'KYP / Monitoramento':'hsl(38,40%,58%)',
+  'Manipulação de Resultados':'hsl(335,35%,64%)',
+  'Jogo Responsável':'hsl(150,35%,58%)',
+  'Compliance':'hsl(260,35%,62%)'
+};
+const RISCO_COLORS = {"Alto":"hsl(0,70%,60%)","Médio":"hsl(38,90%,62%)","Baixo":"hsl(142,45%,55%)"};
+const PAGE_SIZE = 25;
+const JIRA_BASE_URL = "https://estrela-bet.atlassian.net/browse/";
+
+function isOpen(s){return OPEN_STATUSES.includes(s)}
+function isCoaf(s){return COAF_STATUSES.includes(s)}
+
+// ==================== FUNÇÕES DE SLA ====================
+
+function isDiaUtil(date) {
+  const dia = date.getDay();
+  return dia !== 0 && dia !== 6;
+}
+
+function getProximoDiaUtil(data) {
+  const proximo = new Date(data);
+  proximo.setDate(proximo.getDate() + 1);
+  while (!isDiaUtil(proximo)) {
+    proximo.setDate(proximo.getDate() + 1);
+  }
+  return proximo;
+}
+
+function getDiasUteisDecorridos(dataReferencia) {
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+  const ref = new Date(dataReferencia);
+  ref.setHours(0, 0, 0, 0);
+  
+  if (ref >= hoje) return 0;
+  
+  const primeiroDiaUtil = getProximoDiaUtil(ref);
+  
+  if (primeiroDiaUtil > hoje) return 0;
+  
+  let diasUteis = 0;
+  const current = new Date(primeiroDiaUtil);
+  
+  while (current <= hoje) {
+    if (isDiaUtil(current)) {
+      diasUteis++;
+    }
+    current.setDate(current.getDate() + 1);
+  }
+  return diasUteis;
+}
+
+function getSlaDays(tipo){
+  if(tipo==="Alerta PLD") return 30;
+  if(tipo==="Manipulação de Resultados") return 15;
+  if(tipo==="KYP / Background Check" || tipo==="KYP / Monitoramento" || tipo==="KYP Afiliados") return 2;
+  return 30
+}
+
+function getSlaRefDate(c){
+  if(c.tipo==="Alerta PLD") return c.data_transacao_pld||c.criado;
+  return c.criado
+}
+
+function getSlaRemainingDays(c){
+  if(!isOpen(c.status)) return null;
+  
+  const ref = getSlaRefDate(c);
+  if(!ref) return null;
+  
+  const isKYP = c.tipo === "KYP / Background Check" || c.tipo === "KYP / Monitoramento" || c.tipo === "KYP Afiliados";
+  
+  if (isKYP) {
+    const diasDecorridos = getDiasUteisDecorridos(ref);
+    const diasUteisSLA = 2;
+    return diasUteisSLA - diasDecorridos;
+  } else {
+    const days = getSlaDays(c.tipo);
+    const refDate = new Date(ref);
+    const hoje = new Date();
+    refDate.setHours(0, 0, 0, 0);
+    hoje.setHours(0, 0, 0, 0);
+    
+    const start = new Date(refDate);
+    start.setDate(start.getDate() + 1);
+    const elapsed = Math.floor((hoje - start) / (1000 * 60 * 60 * 24));
+    
+    if (elapsed < 0) return days;
+    return days - elapsed;
+  }
+}
+
+function getSlaStatus(c){
+  if(!isOpen(c.status)) return "resolved";
+  const remaining = getSlaRemainingDays(c);
+  if(remaining === null) return "ok";
+  if(remaining < 0) return "breached";
+  if(remaining === 0) return "warning";
+  return "ok";
+}
+
+function getSlaElapsed(c){
+  const remaining = getSlaRemainingDays(c);
+  if(remaining === null) return null;
+  const days = getSlaDays(c.tipo);
+  return days - remaining;
+}
+
+function getDataVencimento(c) {
+  if (!isOpen(c.status)) return null;
+  
+  const ref = getSlaRefDate(c);
+  if (!ref) return null;
+  
+  const isKYP = c.tipo === "KYP / Background Check" || c.tipo === "KYP / Monitoramento" || c.tipo === "KYP Afiliados";
+  const refDate = new Date(ref);
+  refDate.setHours(0, 0, 0, 0);
+  
+  if (isKYP) {
+    const diasUteisSLA = 2;
+    let dataAtual = getProximoDiaUtil(refDate);
+    let diasUteisContados = 1;
+    while (diasUteisContados < diasUteisSLA) {
+      dataAtual = getProximoDiaUtil(dataAtual);
+      diasUteisContados++;
+    }
+    return dataAtual;
+  } else {
+    const days = getSlaDays(c.tipo);
+    const dataVencimento = new Date(refDate);
+    dataVencimento.setDate(dataVencimento.getDate() + days + 1);
+    return dataVencimento;
+  }
+}
+
+function getSlaDisplay(c) {
+  const isKYP = c.tipo === "KYP / Background Check" || c.tipo === "KYP / Monitoramento" || c.tipo === "KYP Afiliados";
+  const slaStatus = getSlaStatus(c);
+  const remaining = getSlaRemainingDays(c);
+  const elapsed = getSlaElapsed(c);
+  const totalDays = getSlaDays(c.tipo);
+  const dataVencimento = getDataVencimento(c);
+  const dataVencimentoStr = dataVencimento ? dataVencimento.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" }) : null;
+  
+  if (!isOpen(c.status)) {
+    return { 
+      status: "resolved", 
+      text: "Concluído", 
+      badge: "badge-status-done", 
+      display: "Concluído",
+      tooltip: "Caso concluído"
+    };
+  }
+  
+  if (slaStatus === "breached") {
+    const atraso = Math.abs(remaining);
+    if (isKYP) {
+      return { 
+        status: "breached", 
+        text: `⚠ ${atraso} dia(s) útil(is) atrasado`, 
+        badge: "badge-risk-high", 
+        display: `⚠ ${atraso}/${totalDays}d úteis`,
+        tooltip: dataVencimentoStr ? `Vencimento previsto: ${dataVencimentoStr} (vencido)` : 'SLA vencido'
+      };
+    }
+    return { 
+      status: "breached", 
+      text: `⚠ ${atraso} dia(s) atrasado`, 
+      badge: "badge-risk-high", 
+      display: `⚠ ${elapsed}/${totalDays}d`,
+      tooltip: dataVencimentoStr ? `Vencimento previsto: ${dataVencimentoStr} (vencido)` : 'SLA vencido'
+    };
+  }
+  
+  if (slaStatus === "warning") {
+    if (isKYP) {
+      return { 
+        status: "warning", 
+        text: `⏳ Último dia útil`, 
+        badge: "badge-risk-med", 
+        display: `⏳ ${remaining}/${totalDays}d úteis`,
+        tooltip: dataVencimentoStr ? `Vence em: ${dataVencimentoStr}` : 'Vence hoje'
+      };
+    }
+    return { 
+      status: "warning", 
+      text: `⏳ ${remaining} dia(s) restantes`, 
+      badge: "badge-risk-med", 
+      display: `⏳ ${remaining}/${totalDays}d`,
+      tooltip: dataVencimentoStr ? `Vence em: ${dataVencimentoStr}` : 'Próximo do vencimento'
+    };
+  }
+  
+  if (isKYP) {
+    return { 
+      status: "ok", 
+      text: `✓ ${remaining} dia(s) útil(is) restante(s)`, 
+      badge: "badge-risk-low", 
+      display: `✓ ${remaining}/${totalDays}d úteis`,
+      tooltip: dataVencimentoStr ? `Vence em: ${dataVencimentoStr}` : 'No prazo'
+    };
+  }
+  return { 
+    status: "ok", 
+    text: `✓ ${remaining} dia(s) restante(s)`, 
+    badge: "badge-risk-low", 
+    display: `✓ ${remaining}/${totalDays}d`,
+    tooltip: dataVencimentoStr ? `Vence em: ${dataVencimentoStr}` : 'No prazo'
+  };
+}
+
+function getStatusCategory(s){
+  if(COAF_STATUSES.includes(s))return"coaf";
+  if(!OPEN_STATUSES.includes(s))return"closed";
+  return"open"
+}
+function fmtDate(d){if(!d)return"—";const dt=new Date(d);if(isNaN(dt))return"—";return dt.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"2-digit"})}
+function fmtNum(n){return n.toLocaleString("pt-BR")}
+
+// ==================== FUNÇÕES DE EXTRAÇÃO ====================
+function extractCPF(text) {
+  if (!text) return null;
+  let match = text.match(/\b\d{11}\b/);
+  if (match) return match[0];
+  match = text.match(/\b\d{3}\.\d{3}\.\d{3}-\d{2}\b/);
+  if (match) return match[0].replace(/\D/g, '');
+  return null;
+}
+
+function extractEmail(text) {
+  if (!text) return null;
+  const match = text.match(/[\w.-]+@[\w.-]+\.\w+/);
+  return match ? match[0].toLowerCase() : null;
+}
+
+function formatCPF(c){return c.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,"$1.$2.$3-$4")}
+
+// ==================== PARSER ====================
+function parseDate(value) {
+  if (!value) return null;
+  if (typeof value === 'number') {
+    const d = XLSX.SSF.parse_date_code(value);
+    if (!d) return null;
+    return new Date(d.y, d.m - 1, d.d).toISOString();
+  }
+  const str = String(value).trim();
+  if (!str) return null;
+  const br = str.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+  if (br) {
+    return new Date(`${br[3]}-${br[2]}-${br[1]}`).toISOString();
+  }
+  const iso = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) {
+    return new Date(str).toISOString();
+  }
+  const d = new Date(str);
+  return isNaN(d) ? null : d.toISOString();
+}
+function normTipo(raw){
+  const s=raw.trim();
+  if(/pld/i.test(s)||/^tarefa$/i.test(s))return"Alerta PLD";
+  if(/background/i.test(s))return"KYP / Background Check";
+  if(/monitoramento/i.test(s))return"KYP / Monitoramento";
+  if(/manipula/i.test(s))return"Manipulação de Resultados";
+  if(/respons[aá]vel/i.test(s))return"Jogo Responsável";
+  if(/compliance/i.test(s))return"Compliance";
+  if(/afiliados/i.test(s))return"KYP Afiliados";
+  return s||"KYP Afiliados";
+}
+
+function normRisco(raw) {
+  if (!raw) return "Baixo";
+  const s = String(raw).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+  if (s.includes("alto") || s.includes("high")) return "Alto";
+  if (s.includes("medio") || s.includes("medium")) return "Médio";
+  if (s.includes("baixo") || s.includes("low")) return "Baixo";
+  return "Baixo";
+}
+function parseWorkbook(wb){
+  const results=[];
+  for(const name of wb.SheetNames){
+    const rows=XLSX.utils.sheet_to_json(wb.Sheets[name]);
+    for(const row of rows){
+      const id=String(row["Código"]||row["Chave"]||row["Key"]||row["Issue key"]||"").trim();
+      if(!id)continue;
+      const tipo=normTipo(String(row["Tipo de item"]||row["Issue Type"]||row["Tipo"]||""));
+      
+    let riscoRaw = "";
+    if (tipo === "Alerta PLD") {
+      riscoRaw =
+        row["Classificação Risco Usuário"] ||
+        row["Classificacao Risco Usuario"] ||
+        row["Classificacao de Risco Usuario"] ||
+        "";
+    } else {
+      riscoRaw =
+        row["Risco"] ||
+        row["Prioridade"] ||
+        row["Priority"] ||
+        "";
+    }
+    const risco = normRisco(riscoRaw);
+     
+ const emailP = String(
+  row["Email"] ??
+  row["Custom field (Email)"] ??
+  ""
+ ).trim().toLowerCase() || null;
+
+ const transPld=parseDate(row["Data da Transação (PLD)"]||row["Data Transação PLD"]||row["Data Transação - PLD"]||row["Data Transacao PLD"]||row["Data da Transacao (PLD)"]||row["Data Transação"]||row["Transaction Date"]||row["Trans Date"]||row["Custom field (Data da Transação (PLD))"]||row["Custom field (Data Transação PLD)"]||null);
+      results.push({
+        id, resumo:String(row["Resumo"]||row["Summary"]||"").trim(),
+        relator:row["Relator"]?String(row["Relator"]).trim():row["Reporter"]?String(row["Reporter"]).trim():null,
+        prioridade:String(row["Prioridade"]||row["Priority"]||"").trim(),
+        criado:parseDate(row["Criado"]||row["Created"]),
+        atualizado:parseDate(row["Atualizado(a)"]||row["Atualizado"]||row["Updated"]),
+        resolvido:parseDate(row["Resolvido"]||row["Resolved"]),
+        responsavel:row["Responsável"]?String(row["Responsável"]).trim():row["Assignee"]?String(row["Assignee"]).trim():null,
+        status:String(row["Status"]||"").trim(), tipo, risco, data_transacao_pld:transPld,
+  emailP,
+      });
+    }
+  }
+  return results;
+}
+
+// ==================== FUNÇÃO PARA CARREGAR DO SHAREPOINT ====================
+async function loadFromSharePoint() {
+  const urlInput = document.getElementById('sharepointUrl');
+  const statusDiv = document.getElementById('sharepointStatus');
+  const loadBtn = document.getElementById('loadSharepointBtn');
+  
+  let sharepointUrl = urlInput.value.trim();
+  if (!sharepointUrl) {
+    statusDiv.textContent = '❌ Por favor, cole um link da planilha do SharePoint';
+    statusDiv.className = 'sharepoint-status error';
+    return;
+  }
+  
+  // Converte URL de visualização para URL de download
+  let downloadUrl = sharepointUrl;
+  
+  // Remove parâmetros de consulta e adiciona ?download=1
+  if (downloadUrl.includes('?')) {
+    downloadUrl = downloadUrl.split('?')[0];
+  }
+  
+  // Se for URL do tipo /:x:/r/... converte para download direto
+  if (downloadUrl.includes('personal/') || downloadUrl.includes('sites/')) {
+    // Tenta converter para formato de download
+    if (!downloadUrl.includes('download')) {
+      downloadUrl = downloadUrl + '?download=1';
+    }
+  }
+  
+  statusDiv.textContent = '⏳ Carregando planilha do SharePoint...';
+  statusDiv.className = 'sharepoint-status';
+  loadBtn.disabled = true;
+  
+  try {
+    const response = await fetch(downloadUrl, {
+      credentials: 'include', // Envia cookies de autenticação
+      headers: {
+        'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/octet-stream'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Erro HTTP: ${response.status} ${response.statusText}`);
+    }
+    
+    const arrayBuffer = await response.arrayBuffer();
+    const wb = XLSX.read(arrayBuffer, { type: 'array' });
+    allCases = parseWorkbook(wb);
+    
+    // Reseta filtros e estado
+    const now = new Date();
+    const ago = new Date(now);
+    ago.setMonth(ago.getMonth() - 3);
+    filters = {
+      tipo: '', risco: '', responsavel: '', status: '', sla: '', text: '',
+      dateFrom: ago.toISOString().slice(0, 10),
+      dateTo: now.toISOString().slice(0, 10),
+      transFrom: '', transTo: ''
+    };
+    tablePage = 0;
+    expandedPerson = null;
+    personSearch = '';
+    
+    renderAll();
+    
+    statusDiv.textContent = `✅ Carregado com sucesso! ${allCases.length} casos encontrados.`;
+    statusDiv.className = 'sharepoint-status success';
+    
+    // Salva a URL no localStorage para próxima vez
+    localStorage.setItem('lastSharepointUrl', sharepointUrl);
+    
+  } catch (error) {
+    console.error('Erro ao carregar do SharePoint:', error);
+    let errorMsg = error.message;
+    if (error.message.includes('Failed to fetch') || error.message.includes('CORS')) {
+      errorMsg = 'Erro de acesso. Verifique se você está autenticado no SharePoint e se a URL está correta. O arquivo precisa estar acessível.';
+    }
+    statusDiv.textContent = `❌ Erro: ${errorMsg}`;
+    statusDiv.className = 'sharepoint-status error';
+  } finally {
+    loadBtn.disabled = false;
+  }
+}
+
+// ==================== STATE ====================
+let allCases=[];
+let filters={tipo:'',risco:'',responsavel:'',status:'',sla:'',text:'',dateFrom:'',dateTo:'',transFrom:'',transTo:''};
+let tablePage=0;
+let tableSortField='criado';
+let tableSortDir='desc';
+let expandedPerson=null;
+let personSortBy='totalCases';
+let personSearch='';
+let chartInstances=[];
+
+Chart.register(ChartDataLabels);
+Chart.defaults.plugins.legend = { display: false };
+Chart.defaults.plugins.datalabels = {
+  color: '#334155', anchor: 'center', align: 'center', font: { size: 13, weight: '600' }, formatter: (v) => v
+};
+
+// ==================== INIT ====================
+document.getElementById('dateDisplay').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+document.getElementById('uploadZone').addEventListener('click',()=>document.getElementById('fileInput').click());
+document.getElementById('fileInput').addEventListener('change',e=>{const f=e.target.files[0];if(f)loadFile(f);e.target.value=''});
+document.getElementById('loadSharepointBtn').addEventListener('click', loadFromSharePoint);
+
+// Carrega última URL usada do localStorage
+const lastUrl = localStorage.getItem('lastSharepointUrl');
+if (lastUrl) {
+  document.getElementById('sharepointUrl').value = lastUrl;
+}
+
+function handleDrop(e){e.preventDefault();const f=e.dataTransfer.files[0];if(f)loadFile(f)}
+function loadFile(file){
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const data=new Uint8Array(ev.target.result);
+    const wb=XLSX.read(data,{type:'array'});
+    allCases=parseWorkbook(wb);
+    const now=new Date(),ago=new Date(now);ago.setMonth(ago.getMonth()-3);
+    filters={tipo:'',risco:'',responsavel:'',status:'',sla:'',text:'',dateFrom:ago.toISOString().slice(0,10),dateTo:now.toISOString().slice(0,10),transFrom:'',transTo:''};
+    tablePage=0;
+    renderAll();
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// ==================== FILTER ====================
+function applyFilters(cases,f){
+  return cases.filter(c=>{
+    if(f.tipo&&c.tipo!==f.tipo)return false;
+    if(f.risco&&c.risco!==f.risco)return false;
+    if(f.responsavel&&c.responsavel!==f.responsavel)return false;
+    if(f.status){const fs=f.status;if(fs==="open"||fs==="closed"||fs==="coaf"){if(getStatusCategory(c.status)!==fs)return false}else{if(c.status!==fs)return false}}
+    if(f.sla&&getSlaStatus(c)!==f.sla)return false;
+    if(f.dateFrom&&c.criado&&new Date(c.criado)<new Date(f.dateFrom))return false;
+    if(f.dateTo&&c.criado){const e=new Date(f.dateTo);e.setHours(23,59,59,999);if(new Date(c.criado)>e)return false}
+    if((f.dateFrom||f.dateTo)&&!c.criado)return false;
+    if(f.transFrom&&c.data_transacao_pld&&new Date(c.data_transacao_pld)<new Date(f.transFrom))return false;
+    if(f.transTo&&c.data_transacao_pld){const e=new Date(f.transTo);e.setHours(23,59,59,999);if(new Date(c.data_transacao_pld)>e)return false}
+    if((f.transFrom||f.transTo)&&!c.data_transacao_pld)return false;
+    if(f.text){const t=f.text.toLowerCase();if(!(c.id||"").toLowerCase().includes(t)&&!(c.resumo||"").toLowerCase().includes(t)&&!(c.responsavel||"").toLowerCase().includes(t)&&!(c.status||"").toLowerCase().includes(t)&&!(c.tipo||"").toLowerCase().includes(t))return false}
+    return true;
+  });
+}
+
+function getFacetSubset(){
+  const f = { ...filters, risco:'', responsavel:'', status:'', sla:'' };
+  return applyFilters(allCases, f);
+}
+
+// ==================== RENDER ALL ====================
+function renderAll(){
+  if(allCases.length === 0) {
+    document.getElementById('filtersSection').style.display='none';
+    document.getElementById('dateFilters').style.display='none';
+    document.getElementById('slaAlertsPanel').style.display='none';
+    document.getElementById('personPanel').style.display='none';
+    document.getElementById('tablePanel').style.display='none';
+    document.getElementById('kpiGrid').innerHTML = '<div class="kpi-card"><div class="kpi-value" style="color:var(--muted-fg)">—</div><div class="kpi-label">Aguardando upload da planilha</div></div>';
+    document.getElementById('chartsGrid').innerHTML = '<div class="chart-card"><h3 class="chart-title">Carregue uma planilha para visualizar os dados</h3></div>';
+    return;
+  }
+  
+  const filtered=applyFilters(allCases,filters);
+  renderFilters();
+  renderSlaAlerts(filtered);
+  renderKPIs(filtered);
+  renderCharts(filtered);
+  renderPersonPanel(filtered);
+  renderTable(filtered);
+  document.getElementById('filtersSection').style.display='flex';
+  document.getElementById('dateFilters').style.display='flex';
+  document.getElementById('slaAlertsPanel').style.display='grid';
+  document.getElementById('personPanel').style.display='block';
+  document.getElementById('tablePanel').style.display='block';
+  attachKpiCardGlow();
+}
+
+function attachKpiCardGlow() {
+  const cards = document.querySelectorAll('.kpi-card');
+  cards.forEach(card => {
+    card.removeEventListener('mouseenter', handleMouseEnter);
+    card.removeEventListener('mouseleave', handleMouseLeave);
+    card.addEventListener('mouseenter', handleMouseEnter);
+    card.addEventListener('mouseleave', handleMouseLeave);
+  });
+}
+
+function handleMouseEnter(e) {
+  const card = e.currentTarget;
+  const valueElement = card.querySelector('.kpi-value');
+  if (valueElement) {
+    const color = getComputedStyle(valueElement).color;
+    card.style.transition = 'box-shadow 0.18s ease';
+    card.style.boxShadow = `0 0 12px 2px ${color}, 0 8px 20px rgba(0,0,0,0.15)`;
+  }
+}
+
+function handleMouseLeave(e) {
+  const card = e.currentTarget;
+  card.style.boxShadow = '';
+}
+
+function clearDateFilters(){
+  filters.dateFrom=''; filters.dateTo=''; filters.transFrom=''; filters.transTo='';
+  tablePage = 0;
+  renderAll();
+}
+
+function clearOnlyFilters(){
+  filters.tipo=''; filters.risco=''; filters.responsavel=''; filters.status=''; filters.sla=''; filters.text='';
+  tablePage = 0;
+  expandedPerson = null;
+  personSearch = '';
+  const gs = document.getElementById('globalSearch'); if (gs) gs.value='';
+  renderAll();
+}
+
+function renderFilters(){
+  const subset = getFacetSubset();
+  const tipos = [...new Set(allCases.map(c=>c.tipo))].sort();
+  const riscoSet = new Set(subset.map(c=>c.risco));
+  const respsSet = new Set(subset.map(c=>c.responsavel).filter(Boolean));
+  const statusesSet = new Set(subset.map(c=>c.status));
+
+  let slaCounts = {breached:0, warning:0, ok:0, resolved:0};
+  subset.forEach(c=>{ const s=getSlaStatus(c); if (s) slaCounts[s] = (slaCounts[s]||0)+1; });
+  const slaPossible = Object.entries(slaCounts).filter(([k,v])=>v>0).map(([k])=>k);
+
+  if (filters.risco && !riscoSet.has(filters.risco)) filters.risco = '';
+  if (filters.responsavel && !respsSet.has(filters.responsavel)) filters.responsavel = '';
+  if (filters.status && !(['open','closed','coaf'].includes(filters.status) || statusesSet.has(filters.status))) filters.status = '';
+  if (filters.sla && !slaPossible.includes(filters.sla)) filters.sla = '';
+
+  const hasOpen   = subset.some(c=>isOpen(c.status));
+  const hasClosed = subset.some(c=>!isOpen(c.status) && !isCoaf(c.status));
+  const hasCoaf   = subset.some(c=>isCoaf(c.status));
+
+  let h = ``;
+  h += `<select class="filter-select" onchange="filters.tipo=this.value;renderAll()">
+          <option value="">Todos os tipos</option>
+          ${tipos.map(t=>`<option${filters.tipo===t?' selected':''}>${t}</option>`).join('')}
+        </select>`;
+  h += `<select class="filter-select" onchange="filters.risco=this.value;renderAll()">
+          <option value="">Todos os riscos</option>
+          ${['Alto','Médio','Baixo'].filter(r=>riscoSet.has(r)).map(r=>`<option${filters.risco===r?' selected':''}>${r}</option>`).join('')}
+        </select>`;
+  const resps = Array.from(respsSet).sort();
+  h += `<select class="filter-select" onchange="filters.responsavel=this.value;renderAll()">
+          <option value="">Todos os responsáveis</option>
+          ${resps.map(r=>`<option${filters.responsavel===r?' selected':''}>${r}</option>`).join('')}
+        </select>`;
+  const statusOpts = `${hasOpen?`<option value="open"${filters.status==='open'?' selected':''}>Abertos</option>`:''}
+                      ${hasClosed?`<option value="closed"${filters.status==='closed'?' selected':''}>Concluídos</option>`:''}
+                      ${hasCoaf?`<option value="coaf"${filters.status==='coaf'?' selected':''}>Comunicados</option>`:''}
+                      ${Array.from(statusesSet).sort().map(s=>`<option value="${s}"${filters.status===s?' selected':''}>${s}</option>`).join('')}`;
+  h += `<select class="filter-select" onchange="filters.status=this.value;renderAll()">
+          <option value="">Todos os status</option>
+          ${statusOpts}
+        </select>`;
+  const slaOrder = ['breached','warning','ok','resolved'];
+  const slaLabels = {breached:'⚠ Estourado', warning:'⏳ Em Risco', ok:'✓ No Prazo', resolved:'✅ Resolvido'};
+  const slaOptions = slaOrder.filter(k=>slaPossible.includes(k)).map(k=>`<option value="${k}"${filters.sla===k?' selected':''}>${slaLabels[k]}</option>`).join('');
+  h += `<select class="filter-select" onchange="filters.sla=this.value;renderAll()">
+          <option value="">Todos os SLA</option>
+          ${slaOptions}
+        </select>`;
+  h += `<button id="btnClearFilters" class="filter-input" style="height:36px;cursor:pointer;min-width:180px" onclick="clearOnlyFilters()">Limpar filtros</button>`;
+  document.getElementById('filtersSection').innerHTML = h;
+
+  let d = `<span class="subtitle">Criação de:</span><input type="date" class="filter-input" style="width:140px" value="${filters.dateFrom}" onchange="filters.dateFrom=this.value;renderAll()"><span class="subtitle">até:</span><input type="date" class="filter-input" style="width:140px" value="${filters.dateTo}" onchange="filters.dateTo=this.value;renderAll()">`;
+  d += `<span class="subtitle" style="margin-left:0.5rem">Trans. PLD de:</span><input type="date" class="filter-input" style="width:140px" value="${filters.transFrom}" onchange="filters.transFrom=this.value;renderAll()"><span class="subtitle">até:</span><input type="date" class="filter-input" style="width:140px" value="${filters.transTo}" onchange="filters.transTo=this.value;renderAll()"> <button id="btnClearDates" class="filter-input" style="height:36px;cursor:pointer;margin-left:0.5rem;min-width:180px" onclick="clearDateFilters()">Limpar datas</button>`;
+  document.getElementById('dateFilters').innerHTML = d;
+}
+
+function renderKPIs(cases){
+  const open=cases.filter(c=>isOpen(c.status)).length;
+  const closed=cases.filter(c=>!isOpen(c.status)&&!isCoaf(c.status)).length;
+  const coaf=cases.filter(c=>isCoaf(c.status)).length;
+  const breached=cases.filter(c=>getSlaStatus(c)==="breached").length;
+  const high=cases.filter(c=>c.risco==="Alto").length;
+  const resolved=cases.filter(c=>c.criado&&c.resolvido);
+  const avg=resolved.length?Math.round(resolved.reduce((s,c)=>s+(new Date(c.resolvido).getTime()-new Date(c.criado).getTime())/864e5,0)/resolved.length):0;
+  const kpis=[
+    {v:fmtNum(cases.length),l:"Total de Casos",color:"var(--foreground)"},
+    {v:fmtNum(open),l:"Abertos",color:"var(--status-open)"},
+    {v:fmtNum(closed),l:"Concluídos",color:"var(--status-done)"},
+    {v:fmtNum(coaf),l:"Comunicados",color:"var(--coaf)"},
+    {v:fmtNum(breached),l:"SLA Estourado",color:"var(--risk-high)"},
+    {v:fmtNum(high),l:"Risco Alto",color:"var(--risk-high)"},
+    {v:avg+"d",l:"Tempo Médio Resolução",color:"var(--foreground)"},
+  ];
+  document.getElementById('kpiGrid').innerHTML=kpis.map(k=>`<div class="kpi-card"><div class="kpi-value" style="color:${k.color}">${k.v}</div><div class="kpi-label">${k.l}</div></div>`).join('');
+}
+
+function destroyCharts(){chartInstances.forEach(c=>c.destroy());chartInstances=[]}
+function makeChart(canvasId,config){
+  const ctx=document.getElementById(canvasId);
+  if(!ctx)return;
+  const chart=new Chart(ctx,config);
+  chartInstances.push(chart);
+  return chart;
+}
+
+function renderCharts(cases){
+  destroyCharts();
+  const tipoCount={};cases.forEach(c=>tipoCount[c.tipo]=(tipoCount[c.tipo]||0)+1);
+  const riscoCount={};cases.forEach(c=>riscoCount[c.risco]=(riscoCount[c.risco]||0)+1);
+  const timeline=getTimeline(cases);
+  const workload={};cases.filter(c=>c.responsavel&&isOpen(c.status)).forEach(c=>workload[c.responsavel]=(workload[c.responsavel]||0)+1);
+  const wlSorted=Object.entries(workload).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  let breached=0,warning=0,ok=0;
+  cases.filter(c => isOpen(c.status)).forEach(c=>{
+    const s=getSlaStatus(c);
+    if(s==='breached')breached++;
+    else if(s==='warning')warning++;
+    else ok++
+  });
+  const statusD={open:cases.filter(c=>isOpen(c.status)).length,coaf:cases.filter(c=>isCoaf(c.status)).length,closed:cases.filter(c=>!isOpen(c.status)&&!isCoaf(c.status)).length};
+  const resTrend=getResTrend(cases);
+
+  const grid=document.getElementById('chartsGrid');
+  grid.innerHTML=`
+    <div class="chart-card"><h3 class="chart-title">Casos por Tipo</h3><canvas id="chTipo" height="80"></canvas></div>
+    <div class="chart-card"><h3 class="chart-title">Distribuição de Risco</h3><canvas id="chRisco" height="80"></canvas></div>
+    <div class="chart-card span-2"><h3 class="chart-title">Evolução Mensal de Casos</h3><canvas id="chTimeline" height="80"></canvas></div>
+    <div class="chart-card"><h3 class="chart-title">Carga de Trabalho (Casos Abertos)</h3><canvas id="chWorkload" height="80"></canvas></div>
+    <div class="chart-card"><h3 class="chart-title">Visão SLA — Casos Abertos</h3><canvas id="chSla" height="80"></canvas></div>
+    <div class="chart-card"><h3 class="chart-title">Distribuição por Status</h3><canvas id="chStatus" height="80"></canvas></div>
+    <div class="chart-card"><h3 class="chart-title">Tempo Médio de Resolução (dias)</h3><canvas id="chRes" height="80"></canvas></div>
+  `;
+
+  const tipoLabels=Object.keys(tipoCount);
+  makeChart('chTipo',{type:'bar',data:{labels:tipoLabels,datasets:[{data:tipoLabels.map(t=>tipoCount[t]),backgroundColor:tipoLabels.map(t=>TIPO_COLORS[t]||'#94a3b8')}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:11}}},y:{ticks:{font:{size:10}}}}}});
+
+  const rLabels=Object.keys(riscoCount);
+  makeChart('chRisco',{type:'bar',data:{labels:rLabels,datasets:[{data:rLabels.map(r=>riscoCount[r]),backgroundColor:rLabels.map(r=>RISCO_COLORS[r]||'#94a3b8')}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}});
+
+  makeChart('chTimeline',{type:'line',data:{labels:timeline.map(t=>t.month),datasets:[{label:'Criados',data:timeline.map(t=>t.criados),borderColor:'hsl(217,60%,62%)',backgroundColor:'hsla(217,60%,62%,0.15)',fill:true,tension:0.3},{label:'Resolvidos',data:timeline.map(t=>t.resolvidos),borderColor:'hsl(142,45%,55%)',backgroundColor:'hsla(142,45%,55%,0.14)',fill:true,tension:0.3},{label:'COAF',data:timeline.map(t=>t.coaf),borderColor:'hsl(263,45%,64%)',backgroundColor:'hsla(263,45%,64%,0.15)',fill:true,tension:0.3}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:11}}}}}});
+
+  makeChart('chWorkload',{type:'bar',data:{labels:wlSorted.map(w=>w[0].split(' ').slice(0,2).join(' ')),datasets:[{data:wlSorted.map(w=>w[1]),backgroundColor:'hsla(215,35%,62%,0.60)'}]},options:{plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{ticks:{font:{size:9},maxRotation:20}},y:{ticks:{font:{size:11}}}}}});
+
+  makeChart('chSla',{type:'bar',data:{labels:['Estourado','Em Risco','No Prazo'],datasets:[{data:[breached,warning,ok],backgroundColor:['hsl(0,70%,60%)','hsl(38,90%,62%)','hsl(142,45%,55%)']}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}});
+
+  makeChart('chStatus',{type:'bar',data:{labels:['Abertos','COAF','Concluídos'],datasets:[{data:[statusD.open,statusD.coaf,statusD.closed],backgroundColor:['hsl(217,60%,62%)','hsl(263,45%,64%)','hsl(142,45%,55%)']}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}});
+
+  makeChart('chRes',{type:'line',data:{labels:resTrend.map(r=>r.month),datasets:[{label:'Dias',data:resTrend.map(r=>r.avg),borderColor:'hsl(263,45%,64%)',backgroundColor:'hsl(263,45%,64%)',pointRadius:3,tension:0.3}]},options:{plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:11}}}}}});
+}
+
+function getTimeline(cases){
+  const m=new Map();
+  cases.forEach(c=>{
+    if(c.criado){const d=new Date(c.criado);const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');const e=m.get(k)||{criados:0,resolvidos:0,coaf:0};e.criados++;m.set(k,e)}
+    if(c.resolvido){const d=new Date(c.resolvido);const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');const e=m.get(k)||{criados:0,resolvidos:0,coaf:0};e.resolvidos++;m.set(k,e)}
+    if(isCoaf(c.status)&&c.atualizado){const d=new Date(c.atualizado);const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');const e=m.get(k)||{criados:0,resolvidos:0,coaf:0};e.coaf++;m.set(k,e)}
+  });
+  return[...m.entries()].sort(([a],[b])=>a.localeCompare(b)).map(([month,d])=>({month,...d}));
+}
+function getResTrend(cases){
+  const resolved=cases.filter(c=>c.criado&&c.resolvido);const m=new Map();
+  resolved.forEach(c=>{const d=new Date(c.resolvido);const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');const arr=m.get(k)||[];arr.push(Math.round((new Date(c.resolvido)-new Date(c.criado))/864e5));m.set(k,arr)});
+  return[...m.entries()].sort(([a],[b])=>a.localeCompare(b)).map(([month,days])=>({month,avg:Math.round(days.reduce((s,d)=>s+d,0)/days.length)}));
+}
+
+// ==================== RENDER PERSON PANEL ====================
+function renderPersonPanel(cases){
+  const panel=document.getElementById('personPanel');
+  const corr=buildPersonCorrelations(cases);
+  let filtered=corr;
+  if(personSearch){const s=personSearch.toLowerCase();filtered=filtered.filter(p=>p.identifier.includes(s))}
+  filtered.sort((a,b)=>b[personSortBy]-a[personSortBy]);
+  const reincidentes=filtered.filter(p=>p.totalCases>=2);
+  const totalWithCoaf=filtered.filter(p=>p.coafCases>0).length;
+  const totalRecent=filtered.filter(p=>p.coafInLast6Months).length;
+  const showList=reincidentes.length>0?reincidentes:filtered;
+
+  const tableWrap = document.querySelector('#personPanel .table-wrap');
+  const scrollPosition = tableWrap ? tableWrap.scrollTop : 0;
+
+  let h=`<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:1rem">
+    <div><h3 class="chart-title" style="margin-bottom:0">Correlação por CPF / Pessoa</h3>
+    <p class="subtitle" style="margin-top:0.25rem">${corr.length} pessoas · ${reincidentes.length} reincidentes · ${totalWithCoaf} com COAF · ${totalRecent} COAF &lt;6 meses</p></div>
+    <div style="display:flex;gap:0.5rem">
+      <input type="text" class="filter-input" style="width:180px" placeholder="Buscar CPF..." value="${personSearch}" oninput="personSearch=this.value;renderAll()">
+      <select class="filter-select" onchange="personSortBy=this.value;renderAll()"><option value="totalCases"${personSortBy==='totalCases'?' selected':''}>Total</option><option value="openCases"${personSortBy==='openCases'?' selected':''}>Abertos</option><option value="coafCases"${personSortBy==='coafCases'?' selected':''}>COAF</option></select>
+    </div></div>`;
+  h+=`<div class="person-summary"><div class="mini-kpi"><div class="val">${corr.length}</div><div class="lbl">Pessoas</div></div><div class="mini-kpi"><div class="val" style="color:var(--risk-high)">${reincidentes.length}</div><div class="lbl">Reincidentes</div></div><div class="mini-kpi"><div class="val" style="color:var(--coaf)">${totalWithCoaf}</div><div class="lbl">Com COAF</div></div><div class="mini-kpi"><div class="val" style="color:var(--risk-med)">${totalRecent}</div><div class="lbl">COAF &lt;6m</div></div></div>`;
+  h+=`<div class="table-wrap" style="max-height:360px;overflow-y:auto"><table class="data-table"><thead style="position:sticky;top:0;background:var(--card);z-index:5">
+    <th>CPF/Email</th><th>Total</th><th>Abertos</th><th>Encerrados</th><th>COAF</th><th>Último COAF</th><th>COAF &lt;6m</th><th>Risco</th><th>Primeiro Caso</th><th>Último Caso</th>
+    </thead><tbody>`;
+  
+  showList.slice(0,100).forEach(p=>{
+    const rClass=p.riskLevel==='Alto'?'badge-risk-high':p.riskLevel==='Médio'?'badge-risk-med':'badge-risk-low';
+    const displayId=p.type==='cpf'?formatCPF(p.identifier):p.identifier;
+    const isExpanded = expandedPerson === p.identifier;
+    
+    h+=`<tr style="cursor:pointer" onclick="expandedPerson=expandedPerson==='${p.identifier}'?null:'${p.identifier}';renderAll()">
+      <td class="mono-id">${displayId}    </td>
+      <td style="font-weight:700">${p.totalCases}    </td>
+      <td><span class="badge badge-status-open">${p.openCases}</span>    </td>
+      <td><span class="badge badge-status-done">${p.closedCases}</span>    </td>
+      <td>${p.coafCases>0?`<span class="badge badge-coaf">${p.coafCases}</span>`:'—'}    </td>
+      <td>${fmtDate(p.lastCoafDate)}    </td>
+      <td>${p.coafCases>0?(p.coafInLast6Months?'<span class="badge badge-risk-high">⚠ Sim</span>':'<span class="badge badge-risk-low">Não</span>'):'—'}    </td>
+      <td><span class="badge ${rClass}">${p.riskLevel}</span>    </td>
+      <td>${fmtDate(p.firstCaseDate)}    </td>
+      <td>${fmtDate(p.lastCaseDate)}    </td>
+     </tr>`;
+    
+    if(isExpanded){
+      h+=`<tr class="expanded-row">
+        <td colspan="10" style="padding:0; background: var(--muted);">
+          <div style="padding:0.5rem 0.75rem;">
+            <p style="font-size:0.7rem; font-weight:600; margin-bottom:0.5rem; color:var(--muted-fg); display:flex; align-items:center; gap:0.25rem;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              Casos vinculados (${p.cases.length}):
+            </p>
+            <div style="display:flex; flex-direction:column; gap:0.25rem;">`;
+      
+      p.cases.forEach(c=>{
+        const rc=c.risco==='Alto'?'badge-risk-high':c.risco==='Médio'?'badge-risk-med':'badge-risk-low';
+        h+=`<div style="display:flex; align-items:center; gap:0.5rem; font-size:0.7rem; flex-wrap:wrap;">
+          <a href="${JIRA_BASE_URL}${c.id}" target="_blank" class="mono-id" style="font-size:0.7rem">${c.id}</a>
+          <span style="max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;" title="${c.resumo}">${c.resumo}</span>
+          <span class="badge ${rc}" style="font-size:0.65rem">${c.risco}</span>
+          <span style="color:var(--muted-fg); font-size:0.65rem">${c.status}</span>
+          <span style="color:var(--muted-fg); font-size:0.65rem">${fmtDate(c.criado)}</span>
+        </div>`;
+      });
+      
+      h+=`</div></div>    </td>   </tr>`;
+    }
+  });
+  
+  h+=`</tbody></div>`;
+  if(reincidentes.length===0&&filtered.length>0)h+=`<p style="font-size:0.75rem;color:var(--muted-fg);margin-top:0.75rem;text-align:center">Nenhum reincidente encontrado. Mostrando todos os ${filtered.length} registros.</p>`;
+  panel.innerHTML = h;
+  
+  const newTableWrap = document.querySelector('#personPanel .table-wrap');
+  if (newTableWrap && scrollPosition > 0) {
+    setTimeout(() => {
+      newTableWrap.scrollTop = scrollPosition;
+    }, 10);
+  }
+}
+
+function renderTable(cases){
+  const panel=document.getElementById('tablePanel');
+  const RISCO_ORDER={Alto:3,Médio:2,Baixo:1};
+  const SLA_ORDER = {breached:4, warning:3, ok:2, resolved:1};
+  
+  const sorted=[...cases].sort((a,b)=>{
+    let cmp=0;
+    switch(tableSortField){
+      case 'criado':case 'resolvido':case 'data_transacao_pld':{const da=a[tableSortField]?new Date(a[tableSortField]).getTime():0;const db=b[tableSortField]?new Date(b[tableSortField]).getTime():0;cmp=da-db;break}
+      case 'sla':{const sa=SLA_ORDER[getSlaStatus(a)]||0;const sb=SLA_ORDER[getSlaStatus(b)]||0;cmp=sa-sb;if(cmp===0)cmp=(getSlaElapsed(a)||0)-(getSlaElapsed(b)||0);break}
+      case 'risco':cmp=(RISCO_ORDER[a.risco]||0)-(RISCO_ORDER[b.risco]||0);break;
+      default:cmp=String(a[tableSortField]||"").localeCompare(String(b[tableSortField]||""),"pt-BR");
+    }
+    return tableSortDir==='desc'?-cmp:cmp;
+  });
+
+  const totalPages=Math.ceil(sorted.length/PAGE_SIZE);
+  const safePage=Math.min(tablePage,Math.max(0,totalPages-1));
+  const pageData=sorted.slice(safePage*PAGE_SIZE,(safePage+1)*PAGE_SIZE);
+
+  const cols=[{f:'id',l:'ID'},{f:'tipo',l:'Tipo'},{f:'resumo',l:'Resumo'},{f:'status',l:'Status'},{f:'responsavel',l:'Responsável'},{f:'risco',l:'Risco'},{f:'sla',l:'SLA'},{f:'data_transacao_pld',l:'Data Transação - PLD'},{f:'criado',l:'Criado'},{f:'resolvido',l:'Resolvido'}];
+  const arrow=f=>tableSortField===f?(tableSortDir==='desc'?'▼':'▲'):'⇅';
+
+  let h=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem"><h3 class="chart-title" style="margin-bottom:0">Tabela Detalhada (${fmtNum(cases.length)} casos)</h3><div class="pagination">Pág. ${safePage+1} de ${totalPages} <button onclick="tablePage=Math.max(0,tablePage-1);renderAll()" ${safePage===0?'disabled':''}>‹</button><button onclick="tablePage=Math.min(${totalPages-1},tablePage+1);renderAll()" ${safePage>=totalPages-1?'disabled':''}>›</button></div></div>`;
+  h+=`<div class="table-wrap"><table class="data-table"><thead>`;
+  cols.forEach(c=>{h+=`<th onclick="if(tableSortField==='${c.f}')tableSortDir=tableSortDir==='asc'?'desc':'asc';else{tableSortField='${c.f}';tableSortDir='desc'}tablePage=0;renderAll()">${c.l} <span style="opacity:0.5;font-size:10px">${arrow(c.f)}</span></th>`});
+  h+=`</thead><tbody>`;
+
+  pageData.forEach(c=>{
+    const slaDisplay = getSlaDisplay(c);
+    const rBadge=c.risco==='Alto'?'badge-risk-high':c.risco==='Médio'?'badge-risk-med':'badge-risk-low';
+    const sBadge=isCoaf(c.status)?'badge-coaf':isOpen(c.status)?'badge-status-open':'badge-status-done';
+    
+    h+=`<tr>
+      <td class="mono-id"><a href="${JIRA_BASE_URL}${c.id}" target="_blank">${c.id}</a></td>
+      <td>${c.tipo}</td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis" title="${(c.resumo||'').replace(/"/g,'&quot;')}">${c.resumo}</td>
+      <td><span class="badge ${sBadge}">${c.status}</span></td>
+      <td>${c.responsavel||'—'}</td>
+      <td><span class="badge ${rBadge}">${c.risco}</span></td>
+      <td><span class="badge ${slaDisplay.badge}" title="${slaDisplay.tooltip}">${slaDisplay.display}</span></td>
+      <td>${fmtDate(c.data_transacao_pld)}</td>
+      <td>${fmtDate(c.criado)}</td>
+      <td>${fmtDate(c.resolvido)}</td>
+    </tr>`;
+  });
+  h+=`</tbody></table></div>`;
+  panel.innerHTML=h;
+}
+
+// ==================== BUILD PERSON CORRELATIONS ====================
+function buildPersonCorrelations(cases) {
+  const people = new Map();          
+  const emailToCpf = new Map();      
+
+  function getOrCreateCPF(cpf) {
+    if (!people.has(cpf)) {
+      people.set(cpf, {
+        identifier: cpf,
+        type: 'cpf',
+        cases: [],
+        emails: new Set()
+      });
+    }
+    return people.get(cpf);
+  }
+
+  function getOrCreateEmail(email) {
+    if (!people.has(email)) {
+      people.set(email, {
+        identifier: email,
+        type: 'email',
+        cases: []
+      });
+    }
+    return people.get(email);
+  }
+
+  for (const c of cases) {
+    const cpf = extractCPF(c.resumo);
+    const email = c.emailP || extractEmail(c.resumo);
+
+    if (cpf && email) {
+      const person = getOrCreateCPF(cpf);
+      person.cases.push(c);
+      person.emails.add(email);
+      emailToCpf.set(email, cpf);
+      continue;
+    }
+
+    if (cpf) {
+      getOrCreateCPF(cpf).cases.push(c);
+      continue;
+    }
+
+    if (email) {
+      if (emailToCpf.has(email)) {
+        people.get(emailToCpf.get(email)).cases.push(c);
+      } else {
+        getOrCreateEmail(email).cases.push(c);
+      }
+    }
+  }
+
+  const sixAgo = new Date();
+  sixAgo.setMonth(sixAgo.getMonth() - 6);
+
+  const corr = [];
+
+  for (const person of people.values()) {
+    const casesList = person.cases;
+    if (!casesList.length) continue;
+
+    const open = casesList.filter(c => isOpen(c.status)).length;
+    const closed = casesList.filter(c => !isOpen(c.status) && !isCoaf(c.status)).length;
+    const coafCases = casesList.filter(c => isCoaf(c.status));
+    const hiCount = casesList.filter(c => c.risco === "Alto").length;
+
+    const allDates = casesList
+      .map(c => c.criado)
+      .filter(Boolean)
+      .map(d => new Date(d))
+      .sort((a, b) => a - b);
+
+    const coafDates = coafCases
+      .map(c => c.atualizado || c.criado)
+      .filter(Boolean)
+      .map(d => new Date(d))
+      .sort((a, b) => b - a);
+
+    corr.push({
+      identifier: person.identifier,
+      type: person.type,
+      totalCases: casesList.length,
+      openCases: open,
+      closedCases: closed,
+      coafCases: coafCases.length,
+      coafInLast6Months: coafDates.some(d => d >= sixAgo),
+      lastCoafDate: coafDates.length ? coafDates[0].toISOString() : null,
+      cases: casesList,
+      riskLevel:
+        hiCount > casesList.length / 2
+          ? "Alto"
+          : casesList.some(c => c.risco === "Médio")
+          ? "Médio"
+          : "Baixo",
+      firstCaseDate: allDates.length ? allDates[0].toISOString() : null,
+      lastCaseDate: allDates.length ? allDates[allDates.length - 1].toISOString() : null
+    });
+  }
+
+  return corr.sort((a, b) => b.totalCases - a.totalCases);
+}
+
+// ==================== SLA ALERTS ====================
+function getSlaAlerts(cases){
+  const alerts = {
+    expired: [],
+    today: [],
+    soon: []
+  };
+  
+  cases.forEach(c => {
+    if(!isOpen(c.status)) return;
+    const remaining = getSlaRemainingDays(c);
+    if(remaining === null) return;
+    
+    if(remaining < 0){
+      alerts.expired.push({...c, remainingDays: remaining});
+    } else if(remaining === 0){
+      alerts.today.push({...c, remainingDays: remaining});
+    } else if(remaining >= 2 && remaining <= 5){
+      alerts.soon.push({...c, remainingDays: remaining});
+    }
+  });
+  
+  alerts.expired.sort((a,b) => a.remainingDays - b.remainingDays);
+  alerts.today.sort((a,b) => (a.criado || '').localeCompare(b.criado || ''));
+  alerts.soon.sort((a,b) => a.remainingDays - b.remainingDays);
+  
+  return alerts;
+}
+
+function renderSlaAlerts(cases){
+  const alerts = getSlaAlerts(cases);
+  const panel = document.getElementById('slaAlertsPanel');
+  if(!panel) return;
+  
+  const formatAlertItem = (c) => {
+    const rBadge = c.risco === 'Alto' ? 'badge-risk-high' : c.risco === 'Médio' ? 'badge-risk-med' : 'badge-risk-low';
+    const isKYP = c.tipo === "KYP / Background Check" || c.tipo === "KYP / Monitoramento" || c.tipo === "KYP Afiliados";
+    const remainingClass = c.remainingDays < 0 ? 'badge-sla-critical' : (c.remainingDays <= 2 ? 'badge-sla-warning' : '');
+    const dataVencimento = getDataVencimento(c);
+    const dataVencimentoStr = dataVencimento ? dataVencimento.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" }) : null;
+    const tooltip = dataVencimentoStr ? `Vence em: ${dataVencimentoStr}` : '';
+    
+    let remainingText;
+    if (c.remainingDays < 0) {
+      remainingText = `${Math.abs(c.remainingDays)} dia(s) ${isKYP ? 'útil(is)' : ''} atrasado`;
+    } else if (c.remainingDays === 0) {
+      remainingText = `Vence hoje`;
+    } else {
+      remainingText = `${c.remainingDays} dia(s) ${isKYP ? 'útil(is)' : ''} restante(s)`;
+    }
+    
+    return `
+      <div class="sla-alert-item ${c.remainingDays < 0 ? 'sla-critical' : (c.remainingDays <= 2 ? 'sla-warning' : '')}">
+        <div style="flex:1; min-width:0">
+          <a href="${JIRA_BASE_URL}${c.id}" target="_blank" class="mono-id" style="font-size:11px">${c.id}</a>
+          <div style="font-size:0.7rem; color:var(--muted-fg); margin-top:2px">${c.responsavel || 'Sem responsável'} | ${c.tipo}</div>
+        </div>
+        <div style="text-align:right">
+          <span class="badge ${rBadge}" style="font-size:0.65rem">${c.risco}</span>
+          <span class="badge-sla-days ${remainingClass}" style="margin-left:6px" title="${tooltip}">${remainingText}</span>
+        </div>
+      </div>
+    `;
+  };
+  
+  panel.innerHTML = `
+    <div class="sla-alert-card">
+      <div class="sla-alert-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>Vencidos</span>
+        <span class="badge badge-risk-high">${alerts.expired.length}</span>
+      </div>
+      <div class="sla-alert-list">
+        ${alerts.expired.length === 0 ? '<div class="empty-message">Nenhum caso vencido</div>' : alerts.expired.map(formatAlertItem).join('')}
+      </div>
+    </div>
+    <div class="sla-alert-card">
+      <div class="sla-alert-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4l2 2"/><circle cx="12" cy="12" r="10"/><path d="M12 3v2"/><path d="M12 19v2"/><path d="M3 12h2"/><path d="M19 12h2"/></svg>
+        <span>Vencem Hoje</span>
+        <span class="badge badge-risk-med">${alerts.today.length}</span>
+      </div>
+      <div class="sla-alert-list">
+        ${alerts.today.length === 0 ? '<div class="empty-message">Nenhum caso vence hoje</div>' : alerts.today.map(formatAlertItem).join('')}
+      </div>
+    </div>
+    <div class="sla-alert-card">
+      <div class="sla-alert-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Próximos Dias (2-5)</span>
+        <span class="badge badge-risk-low">${alerts.soon.length}</span>
+      </div>
+      <div class="sla-alert-list">
+        ${alerts.soon.length === 0 ? '<div class="empty-message">Nenhum caso vencendo nos próximos dias</div>' : alerts.soon.map(formatAlertItem).join('')}
+      </div>
+    </div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('globalSearch');
+  if(!input) return;
+
+  let debounce;
+  input.addEventListener('input', (e) => {
+    clearTimeout(debounce);
+    debounce = setTimeout(() => {
+      filters.text = e.target.value;
+      tablePage = 0;
+      const filtered = applyFilters(allCases, filters);
+      renderKPIs(filtered);
+      renderCharts(filtered);
+      renderSlaAlerts(filtered);
+      renderPersonPanel(filtered);
+      renderTable(filtered);
+      attachKpiCardGlow();
+    }, 300);
+  });
+});
+
+// Theme functions
+(function(){
+  const root = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+
+  function applyTheme(theme){
+    if(theme === 'dark'){
+      root.setAttribute('data-theme','dark');
+      btn.textContent = '☀️ Light mode';
+    } else {
+      root.removeAttribute('data-theme');
+      btn.textContent = '🌙 Dark mode';
+    }
+  }
+
+  let theme = localStorage.getItem('theme') || 'light';
+  applyTheme(theme);
+
+  btn.addEventListener('click', function(){
+  theme = theme === 'light' ? 'dark' : 'light';
+  localStorage.setItem('theme', theme);
+  applyTheme(theme);
+  if (typeof applyChartThemeColors === 'function') { applyChartThemeColors(); }
+  try { renderAll(); } catch(e) {}
+});
+})();
+
+const __makeChartDarkFix = makeChart;
+makeChart = function(canvasId, config){
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  if(isDark && (canvasId === 'chTimeline' || canvasId === 'chRes')){
+    config.options = config.options || {};
+    config.options.plugins = config.options.plugins || {};
+    config.options.plugins.datalabels = { ...Chart.defaults.plugins.datalabels, color: '#e5e7eb' };
+  }
+  return __makeChartDarkFix(canvasId, config);
+};
+
+const __makeChartThemeAware = makeChart;
+makeChart = function(canvasId, config){
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  if(canvasId === 'chTimeline' || canvasId === 'chRes'){
+    config.options = config.options || {};
+    config.options.plugins = config.options.plugins || {};
+    config.options.plugins.datalabels = { ...Chart.defaults.plugins.datalabels, color: isDark ? '#e5e7eb' : '#0f2a3d' };
+  }
+  return __makeChartThemeAware(canvasId, config);
+};
+
+function applyChartThemeColors(){
+  if (typeof Chart === 'undefined') return;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const textColor = isDark ? '#e5e7eb' : '#0f172a';
+  const gridColor = isDark ? 'rgba(148,163,184,0.25)' : 'rgba(100,116,139,0.25)';
+  Chart.defaults.color = textColor;
+  Chart.defaults.borderColor = gridColor;
+  Chart.defaults.plugins = Chart.defaults.plugins || {};
+  Chart.defaults.plugins.datalabels = { ...(Chart.defaults.plugins.datalabels || {}), color: textColor };
+  if (typeof chartInstances !== 'undefined' && chartInstances && chartInstances.length){
+    chartInstances.forEach((c)=>{
+      if (c.options && c.options.scales){
+        Object.values(c.options.scales).forEach((scale)=>{
+          scale.ticks = { ...(scale.ticks||{}), color: textColor };
+          scale.grid  = { ...(scale.grid||{}),  color: gridColor };
+        });
+      }
+      if (!c.options.plugins) c.options.plugins = {};
+      if (!c.options.plugins.legend) c.options.plugins.legend = {};
+      c.options.plugins.legend.labels = { ...(c.options.plugins.legend.labels||{}), color: textColor };
+      if (!c.options.plugins.datalabels) c.options.plugins.datalabels = {};
+      c.options.plugins.datalabels.color = textColor;
+      try { c.update(); } catch(e) {}
+    });
+  }
+}
+if (document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', applyChartThemeColors);
+} else {
+  applyChartThemeColors();
+}
+</script>
+</body>
+</html>
