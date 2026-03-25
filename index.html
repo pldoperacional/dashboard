@@ -25,118 +25,66 @@
   --sla-warning: hsl(38,95%,50%);
   --sla-critical: hsl(0,78%,47%);
   --radius: 0.75rem;
-
-  --link-color: hsl(215, 80%, 44%);
-  --link-hover: hsl(215, 85%, 38%);
-
-  --btn-clear-all-bg: hsl(215, 85%, 94%);
-  --btn-clear-all-fg: hsl(215, 50%, 28%);
-  --btn-clear-dates-bg: hsl(26, 100%, 94%);
-  --btn-clear-dates-fg: hsl(26, 70%, 30%);
-  --btn-hover-shadow: 0 1px 2px rgba(0,0,0,.05);}
+  --link-color: hsl(215,80%,44%);
+  --link-hover: hsl(215,85%,38%);
+  --btn-clear-all-bg: hsl(215,85%,94%);
+  --btn-clear-all-fg: hsl(215,50%,28%);
+  --btn-clear-dates-bg: hsl(26,100%,94%);
+  --btn-clear-dates-fg: hsl(26,70%,30%);
+  --btn-hover-shadow: 0 1px 2px rgba(0,0,0,.05);
+  --btn-done-bg: hsl(142,45%,45%);
+  --btn-done-hover: hsl(142,45%,35%);
+  --btn-undone-bg: hsl(0,70%,55%);
+  --btn-undone-hover: hsl(0,70%,45%);
+  --tab-active: hsl(215,50%,23%);
+  --trend-up: hsl(142,55%,45%);
+  --trend-down: hsl(0,70%,55%);
+  --trend-stable: hsl(38,85%,50%);
+  --update-badge-bg: #c8e6c9;
+  --update-badge-color: #1b5e20;
+  --update-badge-warning-bg: #ffcdd2;
+  --update-badge-warning-color: #b71c1c;
+}
 body{font-family:'Inter',sans-serif;background:var(--background);color:var(--foreground);-webkit-font-smoothing:antialiased}
 .container{max-width:1400px;margin:0 auto;padding:0 1rem}
 header{background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20}
-.header-inner{display:flex;align-items:center;justify-content:space-between;padding:1rem 0;flex-wrap:wrap;gap:0.5rem}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:1rem 0;flex-wrap:wrap;gap:1rem}
 .logo{width:36px;height:36px;border-radius:8px;background:var(--primary);display:flex;align-items:center;justify-content:center;color:var(--primary-fg)}
 h1{font-size:1.125rem;font-weight:700} .subtitle{font-size:0.75rem;color:var(--muted-fg)}
+.update-banner{font-size:0.75rem;padding:0.25rem 0.75rem;border-radius:20px;background:var(--update-badge-bg);color:var(--update-badge-color);display:inline-flex;align-items:center;gap:0.5rem;white-space:nowrap}
+.update-banner.warning{background:var(--update-badge-warning-bg);color:var(--update-badge-warning-color)}
 main{padding:1.5rem 0}main>*+*{margin-top:1.5rem}
-
-/* Upload */
 .upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:2rem;text-align:center;cursor:pointer;transition:all .2s}
 .upload-zone:hover{border-color:var(--link-color);background:hsla(215,50%,23%,0.05)}
-
-/* Sharepoint URL Section */
-.sharepoint-section {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-.sharepoint-input-group {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.sharepoint-input-group input {
-  flex: 1;
-  min-width: 300px;
-  height: 40px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0 0.75rem;
-  font-size: 0.8rem;
-  background: var(--card);
-  outline: none;
-}
-.sharepoint-input-group input:focus {
-  border-color: var(--link-color);
-}
-.sharepoint-input-group button {
-  height: 40px;
-  padding: 0 1.25rem;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  background: var(--primary);
-  color: var(--primary-fg);
-  border: none;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-.sharepoint-input-group button:hover {
-  opacity: 0.9;
-}
-.sharepoint-input-group button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.sharepoint-status {
-  font-size: 0.7rem;
-  margin-top: 0.5rem;
-  color: var(--muted-fg);
-}
-.sharepoint-status.error {
-  color: var(--risk-high);
-}
-.sharepoint-status.success {
-  color: var(--risk-low);
-}
-
-/* Filters */
 .filters{display:flex;gap:0.75rem;flex-wrap:wrap}
 .filter-select,.filter-input{height:36px;border:1px solid var(--border);border-radius:8px;padding:0 0.75rem;font-size:0.75rem;background:var(--card);outline:none}
 .filter-select:focus,.filter-input:focus{border-color:var(--link-color)}
-
-/* KPIs */
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem}
-.kpi-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:0.4rem;
-  text-align:center;
-  transition:transform .18s ease, box-shadow .18s ease;
-  will-change:transform;
-}
-.kpi-card:hover, .kpi-card:focus-within{
-  transform:translateY(-2px) scale(1.02);
-}
+.tabs-container{display:flex;gap:0.5rem;margin-bottom:1.5rem;border-bottom:2px solid var(--border);padding-bottom:0}
+.tab-btn{display:flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;font-size:0.875rem;font-weight:600;background:transparent;border:none;cursor:pointer;border-radius:8px 8px 0 0;transition:all 0.2s;color:var(--muted-fg)}
+.tab-btn svg{width:18px;height:18px;stroke-width:1.8}
+.tab-btn:hover{background:var(--muted);color:var(--foreground)}
+.tab-btn.active{background:var(--tab-active);color:white}
+.tab-btn.active svg{stroke:white}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-bottom:1.5rem}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:0.4rem;text-align:center;transition:transform .18s ease, box-shadow .18s ease}
+.kpi-card:hover{transform:translateY(-2px) scale(1.02)}
 .kpi-value{font-size:1.875rem;font-weight:800;letter-spacing:-0.025em}
 .kpi-label{font-size:0.75rem;color:var(--muted-fg);margin-top:0.25rem;font-weight:500}
-
-/* Charts */
+.trend-value{font-size:0.7rem;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:4px}
+.trend-up{color:var(--trend-up)}
+.trend-down{color:var(--trend-down)}
+.trend-stable{color:var(--trend-stable)}
 .charts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
 @media(max-width:768px){.charts-grid{grid-template-columns:1fr}}
-.chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:0.4rem;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:0.4rem;box-shadow:0 1px 3px rgba(0,0,0,0.04);cursor:pointer;transition:all 0.2s}
+.chart-card:hover{transform:scale(1.01);box-shadow:0 4px 12px rgba(0,0,0,0.1)}
 .chart-card.span-2{grid-column:span 2}
 @media(max-width:768px){.chart-card.span-2{grid-column:span 1}}
 .chart-title{font-size:0.875rem;font-weight:600;margin-bottom:1rem}
-
-/* SLA Alert Panel */
-.sla-alerts-panel{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1rem}
+.sla-alerts-panel{display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem}
+.sla-alerts-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
 .sla-alert-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:0.4rem;overflow:hidden}
 .sla-alert-title{font-size:0.875rem;font-weight:700;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:0.5rem}
 .sla-alert-title svg{width:18px;height:18px;stroke-width:1.8}
@@ -145,208 +93,331 @@ main{padding:1.5rem 0}main>*+*{margin-top:1.5rem}
 .sla-alert-item:hover{background:var(--muted);border-radius:6px}
 .sla-critical{background:hsla(0,78%,47%,0.1);border-left:3px solid var(--risk-high)}
 .sla-warning{background:hsla(38,95%,50%,0.1);border-left:3px solid var(--risk-med)}
+.sla-done-item{opacity:0.7;background:var(--muted);border-left:3px solid var(--status-done)}
 .empty-message{text-align:center;color:var(--muted-fg);padding:1rem;font-style:italic}
-.badge-sla-days{font-size:0.65rem;padding:2px 6px;border-radius:12px;background:var(--muted);color:var(--muted-fg);cursor:help}
+.badge-sla-days{font-size:0.65rem;padding:2px 6px;border-radius:12px;background:var(--muted);color:var(--muted-fg);cursor:help;white-space:nowrap}
 .badge-sla-critical{background:var(--risk-high);color:white}
 .badge-sla-warning{background:var(--risk-med);color:white}
-
-@media (max-width: 768px){
-  .sla-alerts-panel{grid-template-columns:1fr}
-}
-
-/* Badges */
-.badge{display:inline-flex;align-items:center;padding:2px 10px;border-radius:9999px;font-size:0.75rem;font-weight:600;cursor:help}
+.btn-done{background:var(--btn-done-bg);color:white;border:none;border-radius:4px;padding:4px 8px;font-size:0.65rem;cursor:pointer;transition:all 0.2s}
+.btn-done:hover{background:var(--btn-done-hover);transform:scale(1.02)}
+.btn-undone{background:var(--btn-undone-bg);color:white;border:none;border-radius:4px;padding:4px 8px;font-size:0.65rem;cursor:pointer;transition:all 0.2s}
+.btn-undone:hover{background:var(--btn-undone-hover);transform:scale(1.02)}
+.done-section{margin-top:0.5rem;border-top:2px dashed var(--border);padding-top:0.5rem}
+.done-section .sla-alert-title{color:var(--status-done)}
+.completed-badge{background:var(--status-done);color:white;padding:2px 6px;border-radius:12px;font-size:0.65rem}
+.help-tip{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:9999px;background:var(--muted);color:var(--muted-fg);font-size:0.72rem;font-weight:700;cursor:help;border:1px solid var(--border);line-height:1;vertical-align:middle}
+.help-tip:hover{background:var(--border);color:var(--foreground)}
+@media (max-width: 768px){.sla-alerts-row{grid-template-columns:1fr}}
+.badge{display:inline-flex;align-items:center;padding:2px 10px;border-radius:9999px;font-size:0.75rem;font-weight:600;cursor:help;white-space:nowrap}
 .badge-risk-high{background:var(--risk-high-bg);color:var(--risk-high)}
 .badge-risk-med{background:var(--risk-med-bg);color:var(--risk-med)}
 .badge-risk-low{background:var(--risk-low-bg);color:var(--risk-low)}
 .badge-coaf{background:var(--coaf-bg);color:var(--coaf)}
 .badge-status-open{background:var(--status-open-bg);color:var(--status-open)}
 .badge-status-done{background:var(--status-done-bg);color:var(--status-done)}
-
-/* Table */
 .table-wrap{overflow-x:auto;overflow-y:visible}
 table.data-table{width:100%;font-size:0.75rem;border-collapse:collapse;table-layout:auto}
 .data-table th{text-align:left;padding:0.625rem 0.75rem;color:var(--muted-fg);font-weight:500;border-bottom:1px solid var(--border);cursor:pointer;white-space:nowrap;user-select:none}
 .data-table th:hover{color:var(--foreground)}
 .data-table td{padding:0.5rem 0.75rem;border-bottom:1px solid var(--muted);white-space:normal;word-break:break-word}
+.data-table td:nth-child(8),.data-table td:nth-child(9),.data-table td:nth-child(10){white-space:nowrap}
 .data-table tr:hover td{background:hsla(215,20%,92%,0.5)}
 .mono-id{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--link-color);white-space:nowrap}
-
-@media (max-width: 1200px) {
-  .data-table th, .data-table td {padding: 0.5rem 0.5rem;font-size: 0.7rem;}
-}
-@media (max-width: 768px) {
-  .data-table th, .data-table td {padding: 0.4rem 0.4rem;font-size: 0.65rem;}
-}
-
+@media (max-width: 1200px){.data-table th,.data-table td{padding:0.5rem 0.5rem;font-size:0.7rem}}
+@media (max-width: 768px){.data-table th,.data-table td{padding:0.4rem 0.4rem;font-size:0.65rem}}
 .pagination{display:flex;align-items:center;gap:0.5rem;font-size:0.75rem;color:var(--muted-fg)}
 .pagination button{border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:0.75rem;background:var(--card);cursor:pointer}
 .pagination button:disabled{opacity:0.3;cursor:default}
-
 .person-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:0.75rem;margin-bottom:1rem}
 .mini-kpi{border:1px solid var(--border);border-radius:8px;padding:0.75rem;text-align:center}
 .mini-kpi .val{font-size:1.125rem;font-weight:700}
 .mini-kpi .lbl{font-size:0.75rem;color:var(--muted-fg);margin-top:2px}
 .expanded-cases{background:hsla(215,20%,92%,0.3);padding:0.75rem;margin:0 0.5rem 0.5rem;border-radius:8px}
-
 footer{border-top:1px solid var(--border);padding:1rem 0 2rem;text-align:center;font-size:0.75rem;color:var(--muted-fg)}
-
-[data-theme='dark'] {
-  --background: hsl(220,15%,12%);
-  --foreground: hsl(220,15%,92%);
-  --card: hsl(220,15%,16%);
-  --card-fg: hsl(220,15%,92%);
-  --muted: hsl(220,10%,22%);
-  --muted-fg: hsl(220,10%,70%);
-  --border: hsl(220,10%,28%);
-  --link-color: hsl(215, 85%, 72%);
-  --link-hover: hsl(215, 90%, 78%);
-  --btn-clear-all-bg: hsl(215, 25%, 22%);
-  --btn-clear-all-fg: hsl(215, 80%, 85%);
-  --btn-clear-dates-bg: hsl(26, 35%, 24%);
-  --btn-clear-dates-fg: hsl(26, 85%, 85%);
-  --btn-hover-shadow: 0 1px 2px rgba(0,0,0,.35);}
-[data-theme='dark'] .expanded-cases { background: var(--card); }
-
+[data-theme='dark']{--background:hsl(220,15%,12%);--foreground:hsl(220,15%,92%);--card:hsl(220,15%,16%);--card-fg:hsl(220,15%,92%);--muted:hsl(220,10%,22%);--muted-fg:hsl(220,10%,70%);--border:hsl(220,10%,28%);--link-color:hsl(215,85%,72%);--link-hover:hsl(215,90%,78%);--btn-clear-all-bg:hsl(215,25%,22%);--btn-clear-all-fg:hsl(215,80%,85%);--btn-clear-dates-bg:hsl(26,35%,24%);--btn-clear-dates-fg:hsl(26,85%,85%);--btn-hover-shadow:0 1px 2px rgba(0,0,0,.35);--btn-done-bg:hsl(142,35%,35%);--btn-done-hover:hsl(142,35%,45%);--btn-undone-bg:hsl(0,60%,45%);--btn-undone-hover:hsl(0,60%,55%);--tab-active:hsl(215,50%,35%)}
+[data-theme='dark'] .expanded-cases{background:var(--card)}
 .btn-mono{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--muted-fg);cursor:pointer}
 .btn-mono:hover{color:var(--foreground)}
+[data-theme='dark'] body{background:var(--background);color:var(--foreground)}
+[data-theme='dark'] h1,[data-theme='dark'] h2,[data-theme='dark'] h3,[data-theme='dark'] .chart-title{color:var(--foreground)}
+[data-theme='dark'] .kpi-value{color:var(--foreground)}
+[data-theme='dark'] .kpi-label,[data-theme='dark'] .subtitle{color:var(--muted-fg)}
+[data-theme='dark'] table.data-table td{color:var(--foreground)}
+[data-theme='dark'] table.data-table th{color:var(--muted-fg)}
+[data-theme='dark'] .filter-input,[data-theme='dark'] .filter-select{color:var(--foreground);background:var(--card)}
+[data-theme='dark'] .badge{color:var(--foreground) !important;border-color:var(--muted-fg)}
+[data-theme='dark'] .badge-risk-high{color:var(--risk-high) !important}
+[data-theme='dark'] .badge-risk-med{color:var(--risk-med) !important}
+[data-theme='dark'] .badge-risk-low{color:var(--risk-low) !important}
+[data-theme='dark'] .badge-coaf{color:var(--coaf) !important}
+[data-theme='dark'] .badge-status-open{color:var(--status-open) !important}
+[data-theme='dark'] .badge-status-done{color:var(--status-done) !important}
+a,a:visited{color:var(--link-color)}
+a:hover{color:var(--link-hover)}
+.data-table a{color:var(--link-color)}
+#btnClearFilters,#btnClearDates{height:36px;padding:0 0.75rem;border-radius:8px;font-size:0.75rem;border:1px solid var(--border);cursor:pointer}
+#btnClearFilters{background:var(--btn-clear-all-bg);color:var(--btn-clear-all-fg)}
+#btnClearDates{background:var(--btn-clear-dates-bg);color:var(--btn-clear-dates-fg)}
+#btnClearFilters:hover,#btnClearDates:hover{box-shadow:var(--btn-hover-shadow);filter:brightness(0.98)}
+.badge{border-width:1px;border-style:solid}
+.badge-risk-high{border-color:color-mix(in oklab,var(--risk-high)45%,transparent)}
+.badge-risk-med{border-color:color-mix(in oklab,var(--risk-med)45%,transparent)}
+.badge-risk-low{border-color:color-mix(in oklab,var(--risk-low)45%,transparent)}
+.badge-coaf{border-color:color-mix(in oklab,var(--coaf)45%,transparent)}
+.badge-status-open{border-color:color-mix(in oklab,var(--status-open)45%,transparent)}
+.badge-status-done{border-color:color-mix(in oklab,var(--status-done)45%,transparent)}
+[data-theme='dark'] .badge-risk-high{background:hsla(0,100%,60%,0.22)}
+[data-theme='dark'] .badge-risk-med{background:hsla(48,100%,55%,0.22)}
+[data-theme='dark'] .badge-risk-low{background:hsla(142,70%,45%,0.22)}
+[data-theme='dark'] .badge-coaf{background:hsla(263,85%,65%,0.22)}
+[data-theme='dark'] .badge-status-open{background:hsla(217,85%,62%,0.22)}
+[data-theme='dark'] .badge-status-done{background:hsla(142,70%,45%,0.22)}
+.badge{border:none !important;transition:box-shadow .18s ease,text-shadow .18s ease}
+.badge:hover{text-shadow:0 0 6px currentColor,0 0 14px currentColor;box-shadow:0 0 18px color-mix(in oklab,currentColor 35%,transparent)}
+[data-theme='dark'] .badge-risk-high{color:color-mix(in oklab,var(--risk-high)70%,white 30%) !important}
+[data-theme='dark'] .badge-risk-med{color:color-mix(in oklab,var(--risk-med)70%,white 30%) !important}
+[data-theme='dark'] .badge-risk-low{color:color-mix(in oklab,var(--risk-low)70%,white 30%) !important}
+[data-theme='dark'] .badge-coaf{color:color-mix(in oklab,var(--coaf)70%,white 30%) !important}
+[data-theme='dark'] .badge-status-open{color:color-mix(in oklab,var(--status-open)70%,white 30%) !important}
+[data-theme='dark'] .badge-status-done{color:color-mix(in oklab,var(--status-done)70%,white 30%) !important}
+[data-theme='dark'] .data-table tr:hover td{background:hsla(220,10%,22%,0.55)}
+[data-theme='dark'] ::-webkit-scrollbar{width:10px;height:10px}
+[data-theme='dark'] ::-webkit-scrollbar-track{background:var(--muted);border-radius:6px}
+[data-theme='dark'] ::-webkit-scrollbar-thumb{background:var(--muted-fg);border-radius:6px}
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover{background:var(--link-color)}
+[data-theme='dark'] *{scrollbar-width:thin;scrollbar-color:var(--muted-fg) var(--muted)}
+.expanded-row td{background-color:var(--muted) !important;border-bottom:1px solid var(--border)}
 
-[data-theme='dark'] body {background: var(--background);color: var(--foreground);}
-[data-theme='dark'] h1,[data-theme='dark'] h2,[data-theme='dark'] h3,[data-theme='dark'] h4,[data-theme='dark'] .chart-title {color: var(--foreground);}
-[data-theme='dark'] .kpi-value {color: var(--foreground);}
-[data-theme='dark'] .kpi-label,[data-theme='dark'] .subtitle {color: var(--muted-fg);}
-[data-theme='dark'] table.data-table td {color: var(--foreground);}
-[data-theme='dark'] table.data-table th {color: var(--muted-fg);}
-[data-theme='dark'] .filter-input,[data-theme='dark'] .filter-select {color: var(--foreground);background: var(--card);}
-[data-theme='dark'] .badge {color: var(--foreground) !important;border-color: var(--muted-fg);}
-[data-theme='dark'] .badge-risk-high { color: var(--risk-high) !important; }
-[data-theme='dark'] .badge-risk-med  { color: var(--risk-med) !important; }
-[data-theme='dark'] .badge-risk-low  { color: var(--risk-low) !important; }
-[data-theme='dark'] .badge-coaf      { color: var(--coaf) !important; }
-[data-theme='dark'] .badge-status-open { color: var(--status-open) !important; }
-[data-theme='dark'] .badge-status-done { color: var(--status-done) !important; }
-
-a, a:visited {color: var(--link-color);}
-a:hover {color: var(--link-hover);}
-.data-table a {color: var(--link-color);}
-
-#btnClearFilters, #btnClearDates {height:36px; padding:0 0.75rem; border-radius:8px; font-size:0.75rem;border:1px solid var(--border); cursor:pointer;}
-#btnClearFilters {background: var(--btn-clear-all-bg); color: var(--btn-clear-all-fg);}
-#btnClearDates {background: var(--btn-clear-dates-bg); color: var(--btn-clear-dates-fg);}
-#btnClearFilters:hover, #btnClearDates:hover {box-shadow: var(--btn-hover-shadow); filter: brightness(0.98);}
-
-.badge { border-width: 1px; border-style: solid; }
-.badge-risk-high { border-color: color-mix(in oklab, var(--risk-high) 45%, transparent); }
-.badge-risk-med  { border-color: color-mix(in oklab, var(--risk-med) 45%, transparent); }
-.badge-risk-low  { border-color: color-mix(in oklab, var(--risk-low) 45%, transparent); }
-.badge-coaf      { border-color: color-mix(in oklab, var(--coaf) 45%, transparent); }
-.badge-status-open { border-color: color-mix(in oklab, var(--status-open) 45%, transparent); }
-.badge-status-done { border-color: color-mix(in oklab, var(--status-done) 45%, transparent); }
-
-[data-theme='dark'] .badge-risk-high { background: hsla(0, 100%, 60%, 0.22); }
-[data-theme='dark'] .badge-risk-med  { background: hsla(48,100%, 55%, 0.22); }
-[data-theme='dark'] .badge-risk-low  { background: hsla(142,70%, 45%, 0.22); }
-[data-theme='dark'] .badge-coaf      { background: hsla(263,85%, 65%, 0.22); }
-[data-theme='dark'] .badge-status-open { background: hsla(217,85%, 62%, 0.22); }
-[data-theme='dark'] .badge-status-done { background: hsla(142,70%, 45%, 0.22); }
-
-.badge{ border: none !important; transition: box-shadow .18s ease, text-shadow .18s ease; }
-.badge:hover{ text-shadow: 0 0 6px currentColor, 0 0 14px currentColor; box-shadow: 0 0 18px color-mix(in oklab, currentColor 35%, transparent); }
-[data-theme='dark'] .badge-risk-high   { color: color-mix(in oklab, var(--risk-high) 70%,  white 30%) !important; }
-[data-theme='dark'] .badge-risk-med    { color: color-mix(in oklab, var(--risk-med) 70%,   white 30%) !important; }
-[data-theme='dark'] .badge-risk-low    { color: color-mix(in oklab, var(--risk-low) 70%,   white 30%) !important; }
-[data-theme='dark'] .badge-coaf        { color: color-mix(in oklab, var(--coaf) 70%,       white 30%) !important; }
-[data-theme='dark'] .badge-status-open { color: color-mix(in oklab, var(--status-open) 70%,white 30%) !important; }
-[data-theme='dark'] .badge-status-done { color: color-mix(in oklab, var(--status-done) 70%,white 30%) !important; }
-
-[data-theme='dark'] .data-table tr:hover td{background: hsla(220, 10%, 22%, 0.55);}
-
-/* ===== SCROLLBAR STYLES - DARK MODE ===== */
-[data-theme='dark'] ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+/* Modal de gráfico expandido */
+.chart-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
-[data-theme='dark'] ::-webkit-scrollbar-track {
+.chart-modal.active {
+  display: flex;
+}
+.modal-content {
+  background: var(--card);
+  border-radius: 1rem;
+  padding: 1rem;
+  max-width: 90vw;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  position: relative;
+  cursor: default;
+  box-shadow: 0 20px 35px rgba(0,0,0,0.3);
+  animation: modalFadeIn 0.2s ease;
+}
+.modal-content canvas {
+  max-width: 100%;
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+}
+.modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--muted-fg);
+  background: var(--card);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+.modal-close:hover {
   background: var(--muted);
-  border-radius: 6px;
+  color: var(--foreground);
 }
-[data-theme='dark'] ::-webkit-scrollbar-thumb {
-  background: var(--muted-fg);
-  border-radius: 6px;
-}
-[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
-  background: var(--link-color);
-}
-[data-theme='dark'] * {
-  scrollbar-width: thin;
-  scrollbar-color: var(--muted-fg) var(--muted);
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-/* Estilo para a linha expandida */
-.expanded-row td {
-  background-color: var(--muted) !important;
-  border-bottom: 1px solid var(--border);
+.modal-content {
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
 }
+
+#modalCanvas {
+  flex: 0 0 auto;
+}
+
+
+#modalDataBox {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+
+  max-height: 30vh;
+  overflow-y: auto;
+
+  background: var(--card);
+  color: var(--foreground);
+
+  box-shadow: 0 -10px 25px rgba(0,0,0,.3);
+  border-radius: 8px;
+  padding: .75rem;
+  z-index: 1001;
+}
+
+``
+.btn-clear-chart {
+  height: 28px;
+  padding: 0 10px;
+
+  font-size: 0.7rem;
+  font-weight: 500;
+  line-height: 1;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  border-radius: 6px;
+  border: 1px solid var(--border);
+
+  background: var(--muted);
+  color: var(--muted-fg);
+
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+/* Botão limpar seleção (modal) */
+.btn-clear-chart {
+  height: 32px;
+  padding: 0 12px;
+  gap: 6px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+
+  background: transparent;
+  color: var(--muted-fg);
+
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-clear-chart .icon {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.btn-clear-chart:hover {
+  background: var(--risk-high-bg);
+  color: var(--risk-high);
+  border-color: var(--risk-high);
+}
+``
+
+
 </style>
 </head>
 <body>
-
 <header>
 <div class="container header-inner">
   <div style="display:flex;align-items:center;gap:0.75rem">
-    <div class="logo">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-      </svg>
-    </div>
+    <div class="logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
     <div><h1>Dashboard PLD & FinCrime</h1><p class="subtitle">Monitoramento Operacional</p></div>
   </div>
-  
-  <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+  <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+    <div id="updateBanner" class="update-banner" style="display:none"></div>
     <input type="text" id="globalSearch" class="filter-input" style="min-width:260px" placeholder="Buscar geral...">
-    <button id="themeToggle" class="filter-input" style="cursor:pointer;min-width:110px">🌙 Dark mode</button>
+    <button id="themeToggle" class="filter-input" style="cursor:pointer">🌙 Dark mode</button>
+    <span class="subtitle" id="dateDisplay"></span>
   </div>
-
-  <span class="subtitle" id="dateDisplay"></span>
 </div>
 </header>
-
 <main class="container">
-  <!-- NOVA SEÇÃO: CARREGAR DO SHAREPOINT -->
-  <div class="sharepoint-section">
-    <div class="sharepoint-input-group">
-      <input type="text" id="sharepointUrl" placeholder="Cole o link da planilha do SharePoint (ex: https://.../Pasta%202.xlsx)">
-      <button id="loadSharepointBtn">📎 Carregar do SharePoint</button>
-    </div>
-    <div id="sharepointStatus" class="sharepoint-status">Cole o link da planilha e clique em carregar. (Você precisa estar autenticado no SharePoint)</div>
-  </div>
-
   <div class="upload-zone" id="uploadZone" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 0.75rem;display:block;color:var(--muted-fg)">
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-      <polyline points="17 8 12 3 7 8"/>
-      <line x1="12" y1="3" x2="12" y2="15"/>
-    </svg>
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin:0 auto 0.75rem;display:block"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
     <p style="font-size:0.875rem;font-weight:600">Carregar planilha</p>
-    <p style="font-size:0.75rem;color:var(--muted-fg);margin-top:0.25rem">Arraste ou clique para atualizar (formato .xlsx do Jira)</p>
+    <p style="font-size:0.75rem;color:var(--muted-fg)">Arraste ou clique para atualizar (formato .xlsx do Jira)</p>
     <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none">
   </div>
-
   <div id="filtersSection" class="filters" style="display:none"></div>
-  <div id="dateFilters" class="filters" style="display:none;margin-top:0.75rem"></div>
-
-  <div id="slaAlertsPanel" class="sla-alerts-panel" style="display:none"></div>
-
-  <div id="kpiGrid" class="kpi-grid"></div>
-  <div id="chartsGrid" class="charts-grid"></div>
-  <div id="personPanel" class="chart-card" style="display:none"></div>
-  <div id="tablePanel" class="chart-card" style="display:none"></div>
-
+  <div id="dateFilters" class="filters" style="display:none"></div>
+  <div class="tabs-container">
+    <button class="tab-btn active" type="button" data-tab="operacional"><span>Operacional</span></button>
+    <button class="tab-btn" type="button" data-tab="graficos"><span>Gerencial</span></button>
+</div>
+<div id="tab-operacional" class="tab-content active">
+    <div id="kpiGrid" class="kpi-grid"></div>
+    <div id="slaAlertsPanel" class="sla-alerts-panel" style="display:none"></div>
+    <div id="personPanel" class="chart-card" style="display:none; margin-bottom: 2rem;"></div>
+    <div id="tablePanel" class="chart-card" style="display:none"></div>
+</div>
+<div id="tab-graficos" class="tab-content">
+    <div id="comparisonCards" class="kpi-grid" style="margin-bottom:1rem"></div>
+    <div id="chartsGrid" class="charts-grid"></div>
+</div>
   <footer>Desenvolvido por Leandro Ferreira (2026) — Uso interno</footer>
 </main>
 
+
+<!-- Modal para expansão de gráficos -->
+<div id="chartModal" class="chart-modal">
+  <div class="modal-content">
+    <span class="modal-close">×</span>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;gap:.5rem">
+      <strong id="modalTitle"></strong>
+      <div style="display:flex;gap:.5rem">
+        <button id="btnExportChart" class="filter-input">Exportar PNG</button>
+        <button id="btnShowData" class="filter-input">Ver dados</button>
+
+
+<button id="btnClearChartFilter" class="btn-clear-chart" style="display:none">
+  <span class="icon">✕</span>
+  <span class="label">Limpar</span>
+</button>
+
+
+
+      </div>
+    </div>
+
+    <canvas id="modalCanvas"></canvas>
+
+    <pre id="modalDataBox"
+      style="display:none;margin-top:.75rem;background:var(--muted);padding:.75rem;
+             border-radius:8px;font-size:.7rem;max-height:200px;overflow:auto"></pre>
+  </div>
+</div>
+
+
 <script>
-// ==================== TYPES & CONSTANTS ====================
+// ==================== CONSTANTES ====================
 const OPEN_STATUSES = ["Novo","Work in progress","Em Análise","Aguardando Retorno Diligências","Em Espera","Pendente","Comitê","Preparação","Aprovação","Aprovação Gestão Compliance"];
 const COAF_STATUSES = ["Comunicação COAF","Comunicado"];
 const TIPO_COLORS = {
@@ -355,17 +426,154 @@ const TIPO_COLORS = {
   'KYP / Monitoramento':'hsl(38,40%,58%)',
   'Manipulação de Resultados':'hsl(335,35%,64%)',
   'Jogo Responsável':'hsl(150,35%,58%)',
-  'Compliance':'hsl(260,35%,62%)'
+  'Compliance':'hsl(260,35%,62%)',
+  'Contas de passagem':'hsl(190,35%,58%)'
 };
 const RISCO_COLORS = {"Alto":"hsl(0,70%,60%)","Médio":"hsl(38,90%,62%)","Baixo":"hsl(142,45%,55%)"};
 const PAGE_SIZE = 25;
 const JIRA_BASE_URL = "https://estrela-bet.atlassian.net/browse/";
+const STORAGE_KEY = "sla_completed_items";
+const STORAGE_DATA_KEY = "dashboard_cases_data";
+const STORAGE_TIMESTAMP_KEY = "dashboard_last_update";
 
+function hasChartLib(){ return typeof Chart !== 'undefined'; }
+function hasXlsxLib(){ return typeof XLSX !== 'undefined'; }
+
+// ==================== STORAGE ====================
+let completedItems = new Set();
+
+function getFileHash(cases) {
+  const ids = cases.map(c => c.id).sort().join(',');
+  let hash = 0;
+  for (let i = 0; i < ids.length; i++) {
+    hash = ((hash << 5) - hash) + ids.charCodeAt(i);
+    hash = hash & hash;
+  }
+  return hash.toString();
+}
+
+function loadCompletedItems() {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored && allCases.length > 0) {
+    try {
+      const data = JSON.parse(stored);
+      const currentHash = getFileHash(allCases);
+      if (data.fileHash === currentHash) {
+        completedItems = new Set(data.items);
+      } else {
+        completedItems.clear();
+      }
+    } catch(e) {}
+  }
+}
+
+function saveCompletedItems() {
+  if (allCases.length > 0) {
+    const data = {
+      fileHash: getFileHash(allCases),
+      items: [...completedItems],
+      timestamp: new Date().toISOString()
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+}
+
+function markAsDone(caseId) {
+  completedItems.add(caseId);
+  saveCompletedItems();
+  renderAll();
+}
+
+function markAsUndone(caseId) {
+  completedItems.delete(caseId);
+  saveCompletedItems();
+  renderAll();
+}
+
+function isCompleted(caseId) {
+  return completedItems.has(caseId);
+}
+
+function clearCompletedItems() {
+  completedItems.clear();
+  saveCompletedItems();
+  renderAll();
+}
+
+// ==================== PERSISTÊNCIA DOS DADOS E BANNER ====================
+function saveCasesToStorage() {
+  if (allCases.length > 0) {
+    const dataToStore = {
+      cases: allCases,
+      timestamp: new Date().toISOString(),
+      version: "1.0"
+    };
+    localStorage.setItem(STORAGE_DATA_KEY, JSON.stringify(dataToStore));
+    localStorage.setItem(STORAGE_TIMESTAMP_KEY, dataToStore.timestamp);
+    updateLastUpdateBanner(dataToStore.timestamp);
+  }
+}
+
+function loadCasesFromStorage() {
+  const stored = localStorage.getItem(STORAGE_DATA_KEY);
+  if (stored) {
+    try {
+      const data = JSON.parse(stored);
+      if (data.cases && data.cases.length > 0) {
+        allCases = data.cases;
+        allCases.forEach(c => { c.subtipo_pld = c.subtipo_pld || detectSubtipoPLD(c.resumo, c.tipo); });
+        if (data.timestamp) {
+          updateLastUpdateBanner(data.timestamp);
+        } else {
+          const ts = localStorage.getItem(STORAGE_TIMESTAMP_KEY);
+          if (ts) updateLastUpdateBanner(ts);
+          else hideUpdateBanner();
+        }
+        return true;
+      }
+    } catch(e) {}
+  }
+  hideUpdateBanner();
+  return false;
+}
+
+function updateLastUpdateBanner(timestampISO) {
+  const bannerDiv = document.getElementById('updateBanner');
+  if (!bannerDiv) return;
+  
+  if (!timestampISO) {
+    hideUpdateBanner();
+    return;
+  }
+  
+  const updateDate = new Date(timestampISO);
+  const now = new Date();
+  const isToday = updateDate.toDateString() === now.toDateString();
+  
+  const formattedDate = updateDate.toLocaleString('pt-BR', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+  
+  if (isToday) {
+    bannerDiv.className = 'update-banner';
+    bannerDiv.innerHTML = `Última atualização: ${formattedDate} (hoje)`;
+    bannerDiv.style.display = 'inline-flex';
+  } else {
+    bannerDiv.className = 'update-banner warning';
+    bannerDiv.innerHTML = `⚠️ Planilha desatualizada - realize a atualização (última: ${formattedDate})`;
+    bannerDiv.style.display = 'inline-flex';
+  }
+}
+
+function hideUpdateBanner() {
+  const bannerDiv = document.getElementById('updateBanner');
+  if (bannerDiv) bannerDiv.style.display = 'none';
+}
+
+// ==================== FUNÇÕES SLA ====================
 function isOpen(s){return OPEN_STATUSES.includes(s)}
 function isCoaf(s){return COAF_STATUSES.includes(s)}
-
-// ==================== FUNÇÕES DE SLA ====================
-
 function isDiaUtil(date) {
   const dia = date.getDay();
   return dia !== 0 && dia !== 6;
@@ -408,6 +616,8 @@ function getSlaDays(tipo){
   if(tipo==="Alerta PLD") return 30;
   if(tipo==="Manipulação de Resultados") return 15;
   if(tipo==="KYP / Background Check" || tipo==="KYP / Monitoramento" || tipo==="KYP Afiliados") return 2;
+  if(tipo==="Jogo Responsável") return 3;
+  if(tipo==="Contas de passagem") return 30;
   return 30
 }
 
@@ -426,7 +636,7 @@ function getSlaRemainingDays(c){
   
   if (isKYP) {
     const diasDecorridos = getDiasUteisDecorridos(ref);
-    const diasUteisSLA = 2;
+    const diasUteisSLA = getSlaDays(c.tipo);
     return diasUteisSLA - diasDecorridos;
   } else {
     const days = getSlaDays(c.tipo);
@@ -435,12 +645,13 @@ function getSlaRemainingDays(c){
     refDate.setHours(0, 0, 0, 0);
     hoje.setHours(0, 0, 0, 0);
     
-    const start = new Date(refDate);
-    start.setDate(start.getDate() + 1);
-    const elapsed = Math.floor((hoje - start) / (1000 * 60 * 60 * 24));
+    const dataVencimento = new Date(refDate);
+    dataVencimento.setDate(dataVencimento.getDate() + days - 1);
     
-    if (elapsed < 0) return days;
-    return days - elapsed;
+    const diffTime = dataVencimento - hoje;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    return diffDays;
   }
 }
 
@@ -471,7 +682,7 @@ function getDataVencimento(c) {
   refDate.setHours(0, 0, 0, 0);
   
   if (isKYP) {
-    const diasUteisSLA = 2;
+    const diasUteisSLA = getSlaDays(c.tipo);
     let dataAtual = getProximoDiaUtil(refDate);
     let diasUteisContados = 1;
     while (diasUteisContados < diasUteisSLA) {
@@ -482,7 +693,7 @@ function getDataVencimento(c) {
   } else {
     const days = getSlaDays(c.tipo);
     const dataVencimento = new Date(refDate);
-    dataVencimento.setDate(dataVencimento.getDate() + days + 1);
+    dataVencimento.setDate(dataVencimento.getDate() + days - 1);
     return dataVencimento;
   }
 }
@@ -571,7 +782,7 @@ function getStatusCategory(s){
 function fmtDate(d){if(!d)return"—";const dt=new Date(d);if(isNaN(dt))return"—";return dt.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"2-digit"})}
 function fmtNum(n){return n.toLocaleString("pt-BR")}
 
-// ==================== FUNÇÕES DE EXTRAÇÃO ====================
+// ==================== EXTRAÇÃO ====================
 function extractCPF(text) {
   if (!text) return null;
   let match = text.match(/\b\d{11}\b/);
@@ -619,6 +830,7 @@ function normTipo(raw){
   if(/respons[aá]vel/i.test(s))return"Jogo Responsável";
   if(/compliance/i.test(s))return"Compliance";
   if(/afiliados/i.test(s))return"KYP Afiliados";
+  if(/passagem/i.test(s))return"Contas de passagem";
   return s||"KYP Afiliados";
 }
 
@@ -630,6 +842,20 @@ function normRisco(raw) {
   if (s.includes("baixo") || s.includes("low")) return "Baixo";
   return "Baixo";
 }
+function detectSubtipoPLD(resumo, tipo){
+  if(tipo !== "Alerta PLD") return "";
+  const t = String(resumo || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  if ((t.includes("deposit") || t.includes("deposito") || t.includes("depositos")) && t.includes("50k") && t.includes("mes")) return "Depósitos 50k Mês";
+  if ((t.includes("deposit") || t.includes("deposito") || t.includes("depositos")) && t.includes("30k") && (t.includes("unit") || t.includes("unico") || t.includes("unidade"))) return "Depositos 30k unit";
+  if (t.includes("conta") && t.includes("passagem")) return "Contas de Passagem";
+  if (t.includes("pep") && ((t.includes("deposit") || t.includes("deposito") || t.includes("depositos")) || t.includes("20k"))) return "PEP Depósitos 20k";
+  if (t.includes("50k") && t.includes("mes")) return "Depósitos 50k Mês";
+  if (t.includes("30k") && (t.includes("unit") || t.includes("unico") || t.includes("unidade"))) return "Depositos 30k unit";
+  if (t.includes("passagem")) return "Contas de Passagem";
+  if (t.includes("pep") && t.includes("20k")) return "PEP Depósitos 20k";
+  return "";
+}
+
 function parseWorkbook(wb){
   const results=[];
   for(const name of wb.SheetNames){
@@ -671,6 +897,7 @@ function parseWorkbook(wb){
         resolvido:parseDate(row["Resolvido"]||row["Resolved"]),
         responsavel:row["Responsável"]?String(row["Responsável"]).trim():row["Assignee"]?String(row["Assignee"]).trim():null,
         status:String(row["Status"]||"").trim(), tipo, risco, data_transacao_pld:transPld,
+        subtipo_pld: detectSubtipoPLD(String(row["Resumo"]||row["Summary"]||"").trim(), tipo),
   emailP,
       });
     }
@@ -678,93 +905,482 @@ function parseWorkbook(wb){
   return results;
 }
 
-// ==================== FUNÇÃO PARA CARREGAR DO SHAREPOINT ====================
-async function loadFromSharePoint() {
-  const urlInput = document.getElementById('sharepointUrl');
-  const statusDiv = document.getElementById('sharepointStatus');
-  const loadBtn = document.getElementById('loadSharepointBtn');
+// ==================== PERSON CORRELATION ====================
+function buildPersonCorrelations(cases) {
+  const groups = new Map();
+  const emailToCpf = new Map();
+  const cpfToEmails = new Map();
   
-  let sharepointUrl = urlInput.value.trim();
-  if (!sharepointUrl) {
-    statusDiv.textContent = '❌ Por favor, cole um link da planilha do SharePoint';
-    statusDiv.className = 'sharepoint-status error';
+  for (const c of cases) {
+    const cpf = extractCPF(c.resumo);
+    const email = c.emailP || extractEmail(c.resumo);
+    
+    if (cpf) {
+      if (!cpfToEmails.has(cpf)) cpfToEmails.set(cpf, new Set());
+      if (email) {
+        cpfToEmails.get(cpf).add(email);
+        emailToCpf.set(email, cpf);
+      }
+    }
+  }
+  
+  for (const c of cases) {
+    const cpf = extractCPF(c.resumo);
+    const email = c.emailP || extractEmail(c.resumo);
+    
+    let mainId = null;
+    
+    if (cpf) {
+      mainId = cpf;
+    } else if (email && emailToCpf.has(email)) {
+      mainId = emailToCpf.get(email);
+    } else if (email) {
+      mainId = email;
+    }
+    
+    if (mainId) {
+      if (!groups.has(mainId)) {
+        groups.set(mainId, {
+          identifier: mainId,
+          type: (cpf && mainId === cpf) ? 'cpf' : 'email',
+          cases: [],
+          emails: new Set(),
+          cpfs: new Set()
+        });
+      }
+      const group = groups.get(mainId);
+      group.cases.push(c);
+      if (email) group.emails.add(email);
+      if (cpf) group.cpfs.add(cpf);
+    }
+  }
+  
+  const sixAgo = new Date();
+  sixAgo.setMonth(sixAgo.getMonth() - 6);
+  const corr = [];
+  
+  for (const group of groups.values()) {
+    const casesList = group.cases;
+    if (!casesList.length) continue;
+    
+    const open = casesList.filter(c => isOpen(c.status)).length;
+    const closed = casesList.filter(c => !isOpen(c.status) && !isCoaf(c.status)).length;
+    const coafCases = casesList.filter(c => isCoaf(c.status));
+    const hiCount = casesList.filter(c => c.risco === "Alto").length;
+    
+    const allDates = casesList.map(c => c.criado).filter(Boolean).map(d => new Date(d)).sort((a, b) => a - b);
+    const coafDates = coafCases.map(c => c.atualizado || c.criado).filter(Boolean).map(d => new Date(d)).sort((a, b) => b - a);
+    
+    let displayId = group.identifier;
+    let displayType = group.type;
+    if (group.emails.size > 0 && group.type === 'cpf') {
+      displayId = Array.from(group.emails)[0];
+      displayType = 'email';
+    }
+    
+    corr.push({
+      identifier: displayId,
+      originalIdentifier: group.identifier,
+      type: displayType,
+      totalCases: casesList.length,
+      openCases: open,
+      closedCases: closed,
+      coafCases: coafCases.length,
+      coafInLast6Months: coafDates.some(d => d >= sixAgo),
+      lastCoafDate: coafDates.length ? coafDates[0].toISOString() : null,
+      cases: casesList,
+      riskLevel: hiCount > casesList.length / 2 ? "Alto" : casesList.some(c => c.risco === "Médio") ? "Médio" : "Baixo",
+      firstCaseDate: allDates.length ? allDates[0].toISOString() : null,
+      lastCaseDate: allDates.length ? allDates[allDates.length - 1].toISOString() : null
+    });
+  }
+  
+  return corr.sort((a, b) => b.totalCases - a.totalCases);
+}
+
+// ==================== SLA ALERTS ====================
+function getSlaAlerts(cases){
+  const alerts = {
+    expired: [],
+    today: [],
+    soon: []
+  };
+  
+  cases.forEach(c => {
+    if(!isOpen(c.status)) return;
+    if(isCompleted(c.id)) return;
+    
+    const remaining = getSlaRemainingDays(c);
+    if(remaining === null) return;
+    
+    if(remaining < 0){
+      alerts.expired.push({...c, remainingDays: remaining});
+    } else if(remaining === 0){
+      alerts.today.push({...c, remainingDays: remaining});
+    } else if(remaining >= 1 && remaining <= 5){
+      alerts.soon.push({...c, remainingDays: remaining});
+    }
+  });
+  
+  alerts.expired.sort((a,b) => a.remainingDays - b.remainingDays);
+  alerts.today.sort((a,b) => (a.criado || '').localeCompare(b.criado || ''));
+  alerts.soon.sort((a,b) => a.remainingDays - b.remainingDays);
+  
+  return alerts;
+}
+
+function getCompletedCases(cases) {
+  return cases.filter(c => isCompleted(c.id) && isOpen(c.status));
+}
+
+function renderSlaAlerts(cases){
+  const alerts = getSlaAlerts(cases);
+  const completedCases = getCompletedCases(cases);
+  const panel = document.getElementById('slaAlertsPanel');
+  if(!panel) return;
+  
+  const formatAlertItem = (c, showUndoneButton = true) => {
+    const rBadge = c.risco === 'Alto' ? 'badge-risk-high' : c.risco === 'Médio' ? 'badge-risk-med' : 'badge-risk-low';
+    const isKYP = c.tipo === "KYP / Background Check" || c.tipo === "KYP / Monitoramento" || c.tipo === "KYP Afiliados";
+    const remainingClass = c.remainingDays < 0 ? 'badge-sla-critical' : (c.remainingDays <= 2 ? 'badge-sla-warning' : '');
+    const dataVencimento = getDataVencimento(c);
+    const dataVencimentoStr = dataVencimento ? dataVencimento.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" }) : null;
+    const tooltip = dataVencimentoStr ? `Vence em: ${dataVencimentoStr}` : '';
+    
+    let remainingText;
+    if (c.remainingDays < 0) {
+      remainingText = `${Math.abs(c.remainingDays)} dia(s) ${isKYP ? 'útil(is)' : ''} atrasado`;
+    } else if (c.remainingDays === 0) {
+      remainingText = `Vence hoje`;
+    } else {
+      remainingText = `${c.remainingDays} dia(s) ${isKYP ? 'útil(is)' : ''} restante(s)`;
+    }
+    
+    const buttonHtml = showUndoneButton 
+      ? `<button class="btn-done" onclick="markAsDone('${c.id}')" title="Marcar como concluído temporariamente">✓ Feito</button>`
+      : `<button class="btn-undone" onclick="markAsUndone('${c.id}')" title="Desfazer conclusão">↺ Desfazer</button>`;
+    
+    return `
+      <div class="sla-alert-item ${c.remainingDays < 0 ? 'sla-critical' : (c.remainingDays <= 2 ? 'sla-warning' : '')}">
+        <div style="flex:1; min-width:0">
+          <a href="${JIRA_BASE_URL}${c.id}" target="_blank" class="mono-id" style="font-size:11px">${c.id}</a>
+          <div style="font-size:0.7rem; color:var(--muted-fg); margin-top:2px">${c.responsavel || 'Sem responsável'} | ${c.tipo}</div>
+        </div>
+        <div style="text-align:right">
+          <span class="badge ${rBadge}" style="font-size:0.65rem">${c.risco}</span>
+          <span class="badge-sla-days ${remainingClass}" style="margin-left:6px" title="${tooltip}">${remainingText}</span>
+          ${buttonHtml}
+        </div>
+      </div>
+    `;
+  };
+  
+  const formatCompletedItem = (c) => {
+    const rBadge = c.risco === 'Alto' ? 'badge-risk-high' : c.risco === 'Médio' ? 'badge-risk-med' : 'badge-risk-low';
+    const isKYP = c.tipo === "KYP / Background Check" || c.tipo === "KYP / Monitoramento" || c.tipo === "KYP Afiliados";
+    const remaining = getSlaRemainingDays(c);
+    const remainingText = remaining !== null ? `${Math.abs(remaining)} dia(s) ${isKYP ? 'útil(is)' : ''} ${remaining < 0 ? 'atrasado' : 'restante(s)'}` : '';
+    
+    return `
+      <div class="sla-alert-item sla-done-item">
+        <div style="flex:1; min-width:0">
+          <a href="${JIRA_BASE_URL}${c.id}" target="_blank" class="mono-id" style="font-size:11px">${c.id}</a>
+          <div style="font-size:0.7rem; color:var(--muted-fg); margin-top:2px">${c.responsavel || 'Sem responsável'} | ${c.tipo}</div>
+        </div>
+        <div style="text-align:right">
+          <span class="badge ${rBadge}" style="font-size:0.65rem">${c.risco}</span>
+          <span class="completed-badge" style="margin-left:6px">✓ Concluído</span>
+          <button class="btn-undone" onclick="markAsUndone('${c.id}')" style="margin-left:6px" title="Desfazer conclusão">↺ Desfazer</button>
+        </div>
+      </div>
+    `;
+  };
+  
+  let html = `<div class="sla-alerts-row">`;
+  
+  html += `
+    <div class="sla-alert-card">
+      <div class="sla-alert-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>Vencidos</span>
+        <span class="badge badge-risk-high">${alerts.expired.length}</span>
+      </div>
+      <div class="sla-alert-list">
+        ${alerts.expired.length === 0 ? '<div class="empty-message">Nenhum caso vencido</div>' : alerts.expired.map(c => formatAlertItem(c)).join('')}
+      </div>
+    </div>
+    <div class="sla-alert-card">
+      <div class="sla-alert-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4l2 2"/><circle cx="12" cy="12" r="10"/><path d="M12 3v2"/><path d="M12 19v2"/><path d="M3 12h2"/><path d="M19 12h2"/></svg>
+        <span>Vencem Hoje</span>
+        <span class="badge badge-risk-med">${alerts.today.length}</span>
+      </div>
+      <div class="sla-alert-list">
+        ${alerts.today.length === 0 ? '<div class="empty-message">Nenhum caso vence hoje</div>' : alerts.today.map(c => formatAlertItem(c)).join('')}
+      </div>
+    </div>
+    <div class="sla-alert-card">
+      <div class="sla-alert-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Próximos Dias (1-5)</span>
+        <span class="badge badge-risk-low">${alerts.soon.length}</span>
+      </div>
+      <div class="sla-alert-list">
+        ${alerts.soon.length === 0 ? '<div class="empty-message">Nenhum caso vencendo nos próximos dias</div>' : alerts.soon.map(c => formatAlertItem(c)).join('')}
+      </div>
+    </div>
+  `;
+  
+  html += `</div>`;
+  
+  if (completedCases.length > 0) {
+    html += `
+      <div class="done-section">
+        <div class="sla-alert-card">
+          <div class="sla-alert-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Controle Diário</span>
+            <span class="completed-badge">${completedCases.length}</span>
+            <button class="btn-undone" style="margin-left:auto; padding:2px 8px" onclick="clearCompletedItems()">Limpar todos</button>
+          </div>
+          <div class="sla-alert-list">
+            ${completedCases.map(c => formatCompletedItem(c)).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  
+  panel.innerHTML = html;
+}
+
+// ==================== COMPARISON CARDS (COM COAF) ====================
+function updateComparisonCards(cases){
+  if(!cases || cases.length === 0) {
+    const container = document.getElementById('comparisonCards');
+    if(container) container.innerHTML = '<div class="kpi-card"><div class="kpi-value">—</div><div class="kpi-label">Aguardando dados</div></div>';
     return;
   }
   
-  // Converte URL de visualização para URL de download
-  let downloadUrl = sharepointUrl;
-  
-  // Remove parâmetros de consulta e adiciona ?download=1
-  if (downloadUrl.includes('?')) {
-    downloadUrl = downloadUrl.split('?')[0];
-  }
-  
-  // Se for URL do tipo /:x:/r/... converte para download direto
-  if (downloadUrl.includes('personal/') || downloadUrl.includes('sites/')) {
-    // Tenta converter para formato de download
-    if (!downloadUrl.includes('download')) {
-      downloadUrl = downloadUrl + '?download=1';
-    }
-  }
-  
-  statusDiv.textContent = '⏳ Carregando planilha do SharePoint...';
-  statusDiv.className = 'sharepoint-status';
-  loadBtn.disabled = true;
-  
   try {
-    const response = await fetch(downloadUrl, {
-      credentials: 'include', // Envia cookies de autenticação
-      headers: {
-        'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/octet-stream'
-      }
-    });
+    const hoje = new Date();
+    const mesAtual = hoje.getMonth();
+    const anoAtual = hoje.getFullYear();
+    const mesAnterior = mesAtual === 0 ? 11 : mesAtual - 1;
+    const anoAnterior = mesAtual === 0 ? anoAtual - 1 : anoAtual;
     
-    if (!response.ok) {
-      throw new Error(`Erro HTTP: ${response.status} ${response.statusText}`);
-    }
+    // Criados
+    const criadosAtual = cases.filter(c => {
+      if(!c.criado) return false;
+      const d = new Date(c.criado);
+      return d.getMonth() === mesAtual && d.getFullYear() === anoAtual;
+    }).length;
     
-    const arrayBuffer = await response.arrayBuffer();
-    const wb = XLSX.read(arrayBuffer, { type: 'array' });
-    allCases = parseWorkbook(wb);
+    const criadosAnterior = cases.filter(c => {
+      if(!c.criado) return false;
+      const d = new Date(c.criado);
+      return d.getMonth() === mesAnterior && d.getFullYear() === anoAnterior;
+    }).length;
     
-    // Reseta filtros e estado
-    const now = new Date();
-    const ago = new Date(now);
-    ago.setMonth(ago.getMonth() - 3);
-    filters = {
-      tipo: '', risco: '', responsavel: '', status: '', sla: '', text: '',
-      dateFrom: ago.toISOString().slice(0, 10),
-      dateTo: now.toISOString().slice(0, 10),
-      transFrom: '', transTo: ''
-    };
-    tablePage = 0;
-    expandedPerson = null;
-    personSearch = '';
+    // Resolvidos
+    const resolvidosAtual = cases.filter(c => {
+      if(!c.resolvido) return false;
+      const d = new Date(c.resolvido);
+      return d.getMonth() === mesAtual && d.getFullYear() === anoAtual;
+    }).length;
     
-    renderAll();
+    const resolvidosAnterior = cases.filter(c => {
+      if(!c.resolvido) return false;
+      const d = new Date(c.resolvido);
+      return d.getMonth() === mesAnterior && d.getFullYear() === anoAnterior;
+    }).length;
     
-    statusDiv.textContent = `✅ Carregado com sucesso! ${allCases.length} casos encontrados.`;
-    statusDiv.className = 'sharepoint-status success';
+    // COAF: casos com status "Comunicação COAF" ou "Comunicado" que foram atualizados (ou criados) no mês
+    const coafAtual = cases.filter(c => {
+      if(!isCoaf(c.status)) return false;
+      const dataRef = c.atualizado || c.criado;
+      if(!dataRef) return false;
+      const d = new Date(dataRef);
+      return d.getMonth() === mesAtual && d.getFullYear() === anoAtual;
+    }).length;
     
-    // Salva a URL no localStorage para próxima vez
-    localStorage.setItem('lastSharepointUrl', sharepointUrl);
+    const coafAnterior = cases.filter(c => {
+      if(!isCoaf(c.status)) return false;
+      const dataRef = c.atualizado || c.criado;
+      if(!dataRef) return false;
+      const d = new Date(dataRef);
+      return d.getMonth() === mesAnterior && d.getFullYear() === anoAnterior;
+    }).length;
     
-  } catch (error) {
-    console.error('Erro ao carregar do SharePoint:', error);
-    let errorMsg = error.message;
-    if (error.message.includes('Failed to fetch') || error.message.includes('CORS')) {
-      errorMsg = 'Erro de acesso. Verifique se você está autenticado no SharePoint e se a URL está correta. O arquivo precisa estar acessível.';
-    }
-    statusDiv.textContent = `❌ Erro: ${errorMsg}`;
-    statusDiv.className = 'sharepoint-status error';
-  } finally {
-    loadBtn.disabled = false;
+    const nomes = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    const mesAtualNome = nomes[mesAtual];
+    const mesAnteriorNome = nomes[mesAnterior];
+    
+    // Percentuais
+    const varCriados = criadosAnterior ? ((criadosAtual - criadosAnterior) / criadosAnterior * 100).toFixed(1) : (criadosAtual === 0 ? 0 : 100);
+    const varResolvidos = resolvidosAnterior ? ((resolvidosAtual - resolvidosAnterior) / resolvidosAnterior * 100).toFixed(1) : (resolvidosAtual === 0 ? 0 : 100);
+    const diffCoaf = coafAtual - coafAnterior;
+    
+    const criadosClass = varCriados >= 0 ? 'trend-up' : 'trend-down';
+    const resolvidosClass = varResolvidos >= 0 ? 'trend-up' : 'trend-down';
+    const coafClass = diffCoaf >= 0 ? 'trend-up' : 'trend-down';
+    
+    const criadosVar = `${varCriados >= 0 ? '↑' : '↓'} ${Math.abs(varCriados)}%`;
+    const resolvidosVar = `${varResolvidos >= 0 ? '↑' : '↓'} ${Math.abs(varResolvidos)}%`;
+    const coafVar = `${diffCoaf >= 0 ? '↑' : '↓'} ${Math.abs(diffCoaf)}`;
+    
+    const cardHtml = `
+      <div class="kpi-card">
+        <div class="kpi-value">${fmtNum(criadosAtual)}</div>
+        <div class="kpi-label">📝 Criados (${mesAtualNome})</div>
+        <div class="trend-value ${criadosClass}">${criadosVar} vs ${fmtNum(criadosAnterior)} em ${mesAnteriorNome}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">${fmtNum(resolvidosAtual)}</div>
+        <div class="kpi-label">✅ Resolvidos (${mesAtualNome})</div>
+        <div class="trend-value ${resolvidosClass}">${resolvidosVar} vs ${fmtNum(resolvidosAnterior)} em ${mesAnteriorNome}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-value">${fmtNum(coafAtual)}</div>
+        <div class="kpi-label">🛡️ COAF (${mesAtualNome})</div>
+        <div class="trend-value ${coafClass}">${coafVar} vs ${fmtNum(coafAnterior)} em ${mesAnteriorNome}</div>
+      </div>
+    `;
+    const container = document.getElementById('comparisonCards');
+    if(container) container.innerHTML = cardHtml;
+  } catch(e) {
+    console.warn("Erro ao atualizar cards:", e);
   }
 }
 
+
+/* ========= MODAL DE GRÁFICO (VERSÃO ESTÁVEL FINAL) ========= */
+
+let modalChart = null;
+
+function setupChartModal() {
+  if (!hasChartLib()) return () => {};
+  const modal = document.getElementById('chartModal');
+  const modalCanvas = document.getElementById('modalCanvas');
+  const modalTitle = document.getElementById('modalTitle');
+  const closeBtn = modal.querySelector('.modal-close');
+  const btnExport = document.getElementById('btnExportChart');
+  const btnShowData = document.getElementById('btnShowData');
+  const dataBox = document.getElementById('modalDataBox');
+
+const btnClear = document.getElementById('btnClearChartFilter');
+
+if (btnClear) {
+  btnClear.onclick = () => {
+    // 🔄 reset total simples
+    location.reload();
+  };
+}
+
+
+  function closeModal() {
+    modal.classList.remove('active');
+    dataBox.style.display = 'none';
+    if (modalChart) {
+      modalChart.destroy();
+      modalChart = null;
+    }
+  }
+
+  modal.addEventListener('click', e => {
+    if (e.target === modal || e.target === closeBtn) closeModal();
+  });
+
+  document.getElementById('chartsGrid').addEventListener('click', e => {
+    const card = e.target.closest('.chart-card');
+    if (!card) return;
+
+    const canvas = card.querySelector('canvas');
+    if (!canvas) return;
+
+    const chart = chartInstances.find(c => c.canvas === canvas);
+    if (!chart) return;
+
+    if (modalChart) modalChart.destroy();
+
+    modalTitle.textContent =
+      card.querySelector('.chart-title')?.textContent || 'Gráfico';
+
+// 🔥 FORÇA O TAMANHO REAL DO MODAL E DO CANVAS
+
+// ✅ largura total, altura automática (NUNCA fixa)
+modalCanvas.style.width = '100%';
+modalCanvas.style.height = '100%';
+
+const modalContent = modalCanvas.closest('.modal-content');
+modalContent.style.width = '90vw';
+modalContent.style.maxHeight = '90vh';
+modalContent.style.overflow = 'hidden';
+``
+
+
+modalChart = new Chart(modalCanvas, {
+  type: chart.config.type,
+  data: JSON.parse(JSON.stringify(chart.config.data)),
+  options: {
+    ...JSON.parse(JSON.stringify(chart.config.options)),
+
+    responsive: true,
+    maintainAspectRatio: false,
+
+    // 👉 ESSENCIAL para não ficar estreito
+    aspectRatio: null,
+
+    layout: { padding: 12 },
+
+    scales: {
+      ...(chart.config.options.scales || {}),
+      x: { ticks: { autoSkip: false } }
+    },
+
+    onClick(evt, elements) {
+      if (!elements.length) return;
+
+      const index = elements[0].index;
+      filters.text = this.data.labels[index];
+      renderAll();
+
+      const btnClear = document.getElementById('btnClearChartFilter');
+      if (btnClear) btnClear.style.display = 'inline-flex';
+
+      closeModal();
+    }
+  }
+});
+
+// 🚀 obriga o Chart.js a recalcular tamanho após montar
+requestAnimationFrame(() => modalChart.resize());
+    btnExport.onclick = () => {
+      const a = document.createElement('a');
+      a.download = `grafico_${Date.now()}.png`;
+      a.href = modalCanvas.toDataURL('image/png');
+      a.click();
+    };
+
+    btnShowData.onclick = () => {
+      dataBox.textContent = modalChart.data.labels
+        .map((l, i) =>
+          `${l}: ${modalChart.data.datasets.map(d => d.data[i]).join(', ')}`
+        )
+        .join('\n');
+      dataBox.style.display =
+        dataBox.style.display === 'none' ? 'block' : 'none';
+    };
+
+    modal.classList.add('active');
+  });
+}
+
+document.addEventListener('DOMContentLoaded', setupChartModal);
+
 // ==================== STATE ====================
 let allCases=[];
-let filters={tipo:'',risco:'',responsavel:'',status:'',sla:'',text:'',dateFrom:'',dateTo:'',transFrom:'',transTo:''};
+let filters={tipo:'',subtipoPLD:'',risco:'',responsavel:'',status:'',sla:'',text:'',dateFrom:'',dateTo:''};
 let tablePage=0;
 let tableSortField='criado';
 let tableSortDir='desc';
@@ -773,33 +1389,54 @@ let personSortBy='totalCases';
 let personSearch='';
 let chartInstances=[];
 
-Chart.register(ChartDataLabels);
-Chart.defaults.plugins.legend = { display: false };
-Chart.defaults.plugins.datalabels = {
-  color: '#334155', anchor: 'center', align: 'center', font: { size: 13, weight: '600' }, formatter: (v) => v
-};
+if (hasChartLib() && typeof ChartDataLabels !== 'undefined') { Chart.register(ChartDataLabels); }
+
+if (hasChartLib()) {
+  Chart.defaults.plugins.datalabels = {
+    color: '#334155', anchor: 'center', align: 'center', font: { size: 13, weight: '600' }, formatter: (v) => v
+  };
+}
 
 // ==================== INIT ====================
+// Tentar carregar dados salvos primeiro
+let dataLoaded = loadCasesFromStorage();
+if (dataLoaded && allCases.length > 0) {
+  loadCompletedItems();
+  const now = new Date();
+  const ago = new Date(now);
+  ago.setMonth(ago.getMonth() - 3);
+  filters = {
+    tipo:'', subtipoPLD:'', risco:'', responsavel:'', status:'', sla:'', text:'',
+    dateFrom: ago.toISOString().slice(0,10),
+    dateTo: now.toISOString().slice(0,10)
+  };
+  renderAll();
+} else {
+  document.getElementById('kpiGrid').innerHTML = '<div class="kpi-card"><div class="kpi-value" style="color:var(--muted-fg)">—</div><div class="kpi-label">Aguardando upload da planilha</div></div>';
+  document.getElementById('chartsGrid').innerHTML = '<div class="chart-card"><h3 class="chart-title">Carregue uma planilha para visualizar os dados</h3></div>';
+  updateComparisonCards([]);
+  hideUpdateBanner();
+}
+
 document.getElementById('dateDisplay').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
 document.getElementById('uploadZone').addEventListener('click',()=>document.getElementById('fileInput').click());
 document.getElementById('fileInput').addEventListener('change',e=>{const f=e.target.files[0];if(f)loadFile(f);e.target.value=''});
-document.getElementById('loadSharepointBtn').addEventListener('click', loadFromSharePoint);
-
-// Carrega última URL usada do localStorage
-const lastUrl = localStorage.getItem('lastSharepointUrl');
-if (lastUrl) {
-  document.getElementById('sharepointUrl').value = lastUrl;
-}
 
 function handleDrop(e){e.preventDefault();const f=e.dataTransfer.files[0];if(f)loadFile(f)}
 function loadFile(file){
+  if (!hasXlsxLib()) {
+    alert('A biblioteca de planilha não carregou. Recarregue a página e tente novamente.');
+    return;
+  }
   const reader=new FileReader();
   reader.onload=ev=>{
     const data=new Uint8Array(ev.target.result);
     const wb=XLSX.read(data,{type:'array'});
     allCases=parseWorkbook(wb);
+    saveCasesToStorage();  // salva dados e timestamp
+    loadCompletedItems();
     const now=new Date(),ago=new Date(now);ago.setMonth(ago.getMonth()-3);
-    filters={tipo:'',risco:'',responsavel:'',status:'',sla:'',text:'',dateFrom:ago.toISOString().slice(0,10),dateTo:now.toISOString().slice(0,10),transFrom:'',transTo:''};
+    filters={tipo:'',subtipoPLD:'',risco:'',responsavel:'',status:'',sla:'',text:'',dateFrom:ago.toISOString().slice(0,10),dateTo:now.toISOString().slice(0,10)};
     tablePage=0;
     renderAll();
   };
@@ -807,30 +1444,33 @@ function loadFile(file){
 }
 
 // ==================== FILTER ====================
+function getCombinedDate(c){
+  return c.data_transacao_pld || c.criado || null;
+}
+
 function applyFilters(cases,f){
   return cases.filter(c=>{
     if(f.tipo&&c.tipo!==f.tipo)return false;
+    if(f.subtipoPLD&&c.subtipo_pld!==f.subtipoPLD)return false;
     if(f.risco&&c.risco!==f.risco)return false;
     if(f.responsavel&&c.responsavel!==f.responsavel)return false;
     if(f.status){const fs=f.status;if(fs==="open"||fs==="closed"||fs==="coaf"){if(getStatusCategory(c.status)!==fs)return false}else{if(c.status!==fs)return false}}
     if(f.sla&&getSlaStatus(c)!==f.sla)return false;
-    if(f.dateFrom&&c.criado&&new Date(c.criado)<new Date(f.dateFrom))return false;
-    if(f.dateTo&&c.criado){const e=new Date(f.dateTo);e.setHours(23,59,59,999);if(new Date(c.criado)>e)return false}
-    if((f.dateFrom||f.dateTo)&&!c.criado)return false;
-    if(f.transFrom&&c.data_transacao_pld&&new Date(c.data_transacao_pld)<new Date(f.transFrom))return false;
-    if(f.transTo&&c.data_transacao_pld){const e=new Date(f.transTo);e.setHours(23,59,59,999);if(new Date(c.data_transacao_pld)>e)return false}
-    if((f.transFrom||f.transTo)&&!c.data_transacao_pld)return false;
-    if(f.text){const t=f.text.toLowerCase();if(!(c.id||"").toLowerCase().includes(t)&&!(c.resumo||"").toLowerCase().includes(t)&&!(c.responsavel||"").toLowerCase().includes(t)&&!(c.status||"").toLowerCase().includes(t)&&!(c.tipo||"").toLowerCase().includes(t))return false}
+    const combinedDate = getCombinedDate(c);
+    if(f.dateFrom&&combinedDate&&new Date(combinedDate)<new Date(f.dateFrom))return false;
+    if(f.dateTo&&combinedDate){const e=new Date(f.dateTo);e.setHours(23,59,59,999);if(new Date(combinedDate)>e)return false}
+    if((f.dateFrom||f.dateTo)&&!combinedDate)return false;
+    if(f.text){const t=f.text.toLowerCase();if(!(c.id||"").toLowerCase().includes(t)&&!(c.resumo||"").toLowerCase().includes(t)&&!(c.responsavel||"").toLowerCase().includes(t)&&!(c.status||"").toLowerCase().includes(t)&&!(c.tipo||"").toLowerCase().includes(t)&&!(c.subtipo_pld||"").toLowerCase().includes(t))return false}
     return true;
   });
 }
 
 function getFacetSubset(){
-  const f = { ...filters, risco:'', responsavel:'', status:'', sla:'' };
+  const f = { ...filters, subtipoPLD:'', risco:'', responsavel:'', status:'', sla:'' };
   return applyFilters(allCases, f);
 }
 
-// ==================== RENDER ALL ====================
+// ==================== RENDER ====================
 function renderAll(){
   if(allCases.length === 0) {
     document.getElementById('filtersSection').style.display='none';
@@ -840,6 +1480,7 @@ function renderAll(){
     document.getElementById('tablePanel').style.display='none';
     document.getElementById('kpiGrid').innerHTML = '<div class="kpi-card"><div class="kpi-value" style="color:var(--muted-fg)">—</div><div class="kpi-label">Aguardando upload da planilha</div></div>';
     document.getElementById('chartsGrid').innerHTML = '<div class="chart-card"><h3 class="chart-title">Carregue uma planilha para visualizar os dados</h3></div>';
+    updateComparisonCards([]);
     return;
   }
   
@@ -850,12 +1491,17 @@ function renderAll(){
   renderCharts(filtered);
   renderPersonPanel(filtered);
   renderTable(filtered);
+  updateComparisonCards(filtered);
   document.getElementById('filtersSection').style.display='flex';
   document.getElementById('dateFilters').style.display='flex';
-  document.getElementById('slaAlertsPanel').style.display='grid';
+  document.getElementById('slaAlertsPanel').style.display='block';
   document.getElementById('personPanel').style.display='block';
   document.getElementById('tablePanel').style.display='block';
   attachKpiCardGlow();
+  
+  // Configurar modal após gráficos renderizados
+  const bindModal = setupChartModal();
+  setTimeout(bindModal, 100); // pequeno atraso para garantir que os canvas existam
 }
 
 function attachKpiCardGlow() {
@@ -884,13 +1530,13 @@ function handleMouseLeave(e) {
 }
 
 function clearDateFilters(){
-  filters.dateFrom=''; filters.dateTo=''; filters.transFrom=''; filters.transTo='';
+  filters.dateFrom=''; filters.dateTo='';
   tablePage = 0;
   renderAll();
 }
 
 function clearOnlyFilters(){
-  filters.tipo=''; filters.risco=''; filters.responsavel=''; filters.status=''; filters.sla=''; filters.text='';
+  filters.tipo=''; filters.subtipoPLD=''; filters.risco=''; filters.responsavel=''; filters.status=''; filters.sla=''; filters.text='';
   tablePage = 0;
   expandedPerson = null;
   personSearch = '';
@@ -909,6 +1555,7 @@ function renderFilters(){
   subset.forEach(c=>{ const s=getSlaStatus(c); if (s) slaCounts[s] = (slaCounts[s]||0)+1; });
   const slaPossible = Object.entries(slaCounts).filter(([k,v])=>v>0).map(([k])=>k);
 
+  if (filters.tipo && filters.tipo !== 'Alerta PLD') filters.subtipoPLD = '';
   if (filters.risco && !riscoSet.has(filters.risco)) filters.risco = '';
   if (filters.responsavel && !respsSet.has(filters.responsavel)) filters.responsavel = '';
   if (filters.status && !(['open','closed','coaf'].includes(filters.status) || statusesSet.has(filters.status))) filters.status = '';
@@ -923,6 +1570,16 @@ function renderFilters(){
           <option value="">Todos os tipos</option>
           ${tipos.map(t=>`<option${filters.tipo===t?' selected':''}>${t}</option>`).join('')}
         </select>`;
+  const subtiposPLD = ['Depósitos 50k Mês','Depositos 30k unit','Contas de Passagem','PEP Depósitos 20k'];
+  const subtipoSet = new Set(subset.filter(c=>c.tipo==='Alerta PLD').map(c=>c.subtipo_pld).filter(Boolean));
+  const subtipoOptions = subtiposPLD.filter(s=>subtipoSet.has(s));
+  if (filters.subtipoPLD && !subtipoSet.has(filters.subtipoPLD)) filters.subtipoPLD = '';
+  if ((!filters.tipo || filters.tipo === 'Alerta PLD') && subtipoOptions.length) {
+    h += `<select class="filter-select" onchange="filters.subtipoPLD=this.value;renderAll()">
+            <option value="">Todos os subtipos PLD</option>
+            ${subtipoOptions.map(s=>`<option value="${s}"${filters.subtipoPLD===s?' selected':''}>${s}</option>`).join('')}
+          </select>`;
+  }
   h += `<select class="filter-select" onchange="filters.risco=this.value;renderAll()">
           <option value="">Todos os riscos</option>
           ${['Alto','Médio','Baixo'].filter(r=>riscoSet.has(r)).map(r=>`<option${filters.risco===r?' selected':''}>${r}</option>`).join('')}
@@ -950,8 +1607,7 @@ function renderFilters(){
   h += `<button id="btnClearFilters" class="filter-input" style="height:36px;cursor:pointer;min-width:180px" onclick="clearOnlyFilters()">Limpar filtros</button>`;
   document.getElementById('filtersSection').innerHTML = h;
 
-  let d = `<span class="subtitle">Criação de:</span><input type="date" class="filter-input" style="width:140px" value="${filters.dateFrom}" onchange="filters.dateFrom=this.value;renderAll()"><span class="subtitle">até:</span><input type="date" class="filter-input" style="width:140px" value="${filters.dateTo}" onchange="filters.dateTo=this.value;renderAll()">`;
-  d += `<span class="subtitle" style="margin-left:0.5rem">Trans. PLD de:</span><input type="date" class="filter-input" style="width:140px" value="${filters.transFrom}" onchange="filters.transFrom=this.value;renderAll()"><span class="subtitle">até:</span><input type="date" class="filter-input" style="width:140px" value="${filters.transTo}" onchange="filters.transTo=this.value;renderAll()"> <button id="btnClearDates" class="filter-input" style="height:36px;cursor:pointer;margin-left:0.5rem;min-width:180px" onclick="clearDateFilters()">Limpar datas</button>`;
+  let d = `<span class="subtitle">Data Combinada (Transação+Criação)</span><span class="help-tip" title="Usa Data Transação PLD quando existir; senão, Data de Criação.">?</span><span class="subtitle">de:</span><input type="date" class="filter-input" style="width:140px" value="${filters.dateFrom}" onchange="filters.dateFrom=this.value;renderAll()"><span class="subtitle">até:</span><input type="date" class="filter-input" style="width:140px" value="${filters.dateTo}" onchange="filters.dateTo=this.value;renderAll()"><button id="btnClearDates" class="filter-input" style="height:36px;cursor:pointer;margin-left:0.5rem;min-width:220px" onclick="clearDateFilters()">Limpar datas</button>`;
   document.getElementById('dateFilters').innerHTML = d;
 }
 
@@ -975,10 +1631,11 @@ function renderKPIs(cases){
   document.getElementById('kpiGrid').innerHTML=kpis.map(k=>`<div class="kpi-card"><div class="kpi-value" style="color:${k.color}">${k.v}</div><div class="kpi-label">${k.l}</div></div>`).join('');
 }
 
-function destroyCharts(){chartInstances.forEach(c=>c.destroy());chartInstances=[]}
+function destroyCharts(){chartInstances.forEach(c=>{ try{ c.destroy(); }catch(e){} });chartInstances=[]}
 function makeChart(canvasId,config){
+  if(!hasChartLib()) return null;
   const ctx=document.getElementById(canvasId);
-  if(!ctx)return;
+  if(!ctx)return null;
   const chart=new Chart(ctx,config);
   chartInstances.push(chart);
   return chart;
@@ -986,9 +1643,14 @@ function makeChart(canvasId,config){
 
 function renderCharts(cases){
   destroyCharts();
+  if (!hasChartLib()) {
+    if (grid) grid.innerHTML = '<div class="chart-card"><h3 class="chart-title">Gráficos indisponíveis</h3><div style="color:var(--muted-fg);font-size:0.82rem;padding-top:0.35rem">A biblioteca de gráficos não carregou neste ambiente. Os dados e filtros continuam disponíveis.</div></div>';
+    return;
+  }
   const tipoCount={};cases.forEach(c=>tipoCount[c.tipo]=(tipoCount[c.tipo]||0)+1);
   const riscoCount={};cases.forEach(c=>riscoCount[c.risco]=(riscoCount[c.risco]||0)+1);
   const timeline=getTimeline(cases);
+  const cohortCases = cases;
   const workload={};cases.filter(c=>c.responsavel&&isOpen(c.status)).forEach(c=>workload[c.responsavel]=(workload[c.responsavel]||0)+1);
   const wlSorted=Object.entries(workload).sort((a,b)=>b[1]-a[1]).slice(0,10);
   let breached=0,warning=0,ok=0;
@@ -1000,12 +1662,14 @@ function renderCharts(cases){
   });
   const statusD={open:cases.filter(c=>isOpen(c.status)).length,coaf:cases.filter(c=>isCoaf(c.status)).length,closed:cases.filter(c=>!isOpen(c.status)&&!isCoaf(c.status)).length};
   const resTrend=getResTrend(cases);
+  const cohort=getResolutionCohort(cohortCases);
 
   const grid=document.getElementById('chartsGrid');
   grid.innerHTML=`
     <div class="chart-card"><h3 class="chart-title">Casos por Tipo</h3><canvas id="chTipo" height="80"></canvas></div>
     <div class="chart-card"><h3 class="chart-title">Distribuição de Risco</h3><canvas id="chRisco" height="80"></canvas></div>
     <div class="chart-card span-2"><h3 class="chart-title">Evolução Mensal de Casos</h3><canvas id="chTimeline" height="80"></canvas></div>
+    <div class="chart-card span-2"><h3 class="chart-title">Safra de Resolução — Total, Mesmo Mês e Mês Seguinte</h3><canvas id="chCohort" height="80"></canvas></div>
     <div class="chart-card"><h3 class="chart-title">Carga de Trabalho (Casos Abertos)</h3><canvas id="chWorkload" height="80"></canvas></div>
     <div class="chart-card"><h3 class="chart-title">Visão SLA — Casos Abertos</h3><canvas id="chSla" height="80"></canvas></div>
     <div class="chart-card"><h3 class="chart-title">Distribuição por Status</h3><canvas id="chStatus" height="80"></canvas></div>
@@ -1016,15 +1680,127 @@ function renderCharts(cases){
   makeChart('chTipo',{type:'bar',data:{labels:tipoLabels,datasets:[{data:tipoLabels.map(t=>tipoCount[t]),backgroundColor:tipoLabels.map(t=>TIPO_COLORS[t]||'#94a3b8')}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:11}}},y:{ticks:{font:{size:10}}}}}});
 
   const rLabels=Object.keys(riscoCount);
-  makeChart('chRisco',{type:'bar',data:{labels:rLabels,datasets:[{data:rLabels.map(r=>riscoCount[r]),backgroundColor:rLabels.map(r=>RISCO_COLORS[r]||'#94a3b8')}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}});
+makeChart('chRisco',{type:'bar',data:{labels:rLabels,datasets:[{data:rLabels.map(r=>riscoCount[r]),backgroundColor:rLabels.map(r=>RISCO_COLORS[r]||'#94a3b8')}]},options:{plugins:{legend:{display:false}}}});
 
-  makeChart('chTimeline',{type:'line',data:{labels:timeline.map(t=>t.month),datasets:[{label:'Criados',data:timeline.map(t=>t.criados),borderColor:'hsl(217,60%,62%)',backgroundColor:'hsla(217,60%,62%,0.15)',fill:true,tension:0.3},{label:'Resolvidos',data:timeline.map(t=>t.resolvidos),borderColor:'hsl(142,45%,55%)',backgroundColor:'hsla(142,45%,55%,0.14)',fill:true,tension:0.3},{label:'COAF',data:timeline.map(t=>t.coaf),borderColor:'hsl(263,45%,64%)',backgroundColor:'hsla(263,45%,64%,0.15)',fill:true,tension:0.3}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:11}}}}}});
+makeChart('chTimeline',{type:'line',data:{labels:timeline.map(t=>t.month),datasets:[{label:'Criados',data:timeline.map(t=>t.criados),borderColor:'hsl(217,60%,62%)',backgroundColor:'hsla(217,60%,62%,0.15)',fill:true,tension:0.3},{label:'Resolvidos',data:timeline.map(t=>t.resolvidos),borderColor:'hsl(142,45%,55%)',backgroundColor:'hsla(142,45%,55%,0.14)',fill:true,tension:0.3},{label:'COAF',data:timeline.map(t=>t.coaf),borderColor:'hsl(263,45%,64%)',backgroundColor:'hsla(263,45%,64%,0.15)',fill:true,tension:0.3}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:11}}}}}});
+
+if(cohort.length){
+makeChart('chCohort',{
+  type:'bar',
+  data:{
+    labels:cohort.map(t=>t.monthLabel),
+    datasets:[
+      {
+        label:'Resolvidos no mesmo mês',
+        data:cohort.map(t=>t.sameMonth),
+        backgroundColor:'hsl(142,45%,55%)',
+        stack:'cohort',
+        datalabels:{
+          color:'#ffffff',
+          backgroundColor:'hsl(142,45%,38%)',
+          borderRadius:6,
+          padding:{top:2,right:6,bottom:2,left:6},
+          font:{size:11,weight:'700'},
+          formatter:(v)=>v>0?v:'',
+          anchor:'center',
+          align:'center',
+          clamp:true
+        }
+      },
+      {
+        label:'Resolvidos no mês seguinte',
+        data:cohort.map(t=>t.nextMonth),
+        backgroundColor:'hsl(38,90%,62%)',
+        stack:'cohort',
+        datalabels:{
+          color:'#111827',
+          backgroundColor:'hsl(38,88%,48%)',
+          borderRadius:6,
+          padding:{top:2,right:6,bottom:2,left:6},
+          font:{size:11,weight:'700'},
+          formatter:(v)=>v>0?v:'',
+          anchor:'center',
+          align:'center',
+          clamp:true
+        }
+      },
+      {
+        label:'Resolvidos depois / em aberto',
+        data:cohort.map(t=>t.otherOrOpen),
+        backgroundColor:'hsla(215,20%,65%,0.85)',
+        stack:'cohort',
+        datalabels:{
+          color:'#ffffff',
+          backgroundColor:'hsl(215,18%,38%)',
+          borderRadius:6,
+          padding:{top:2,right:6,bottom:2,left:6},
+          font:{size:11,weight:'700'},
+          formatter:(v)=>v>0?v:'',
+          anchor:'center',
+          align:'center',
+          clamp:true
+        }
+      },
+      {
+        label:'Total da safra',
+        data:cohort.map(t=>t.total),
+        backgroundColor:'rgba(0,0,0,0)',
+        borderWidth:0,
+        stack:'totals',
+        datalabels:{
+          color:'#ffffff',
+          backgroundColor:'hsl(217,60%,42%)',
+          borderRadius:6,
+          padding:{top:2,right:6,bottom:2,left:6},
+          font:{size:11,weight:'700'},
+          formatter:(v)=>v>0?`Total ${v}`:'',
+          anchor:'end',
+          align:'end',
+          offset:4,
+          clip:false
+        }
+      }
+    ]
+  },
+  options:{
+    plugins:{
+      legend:{position:'bottom',labels:{font:{size:11}}},
+      tooltip:{
+        callbacks:{
+          afterBody(items){
+            const i = items[0]?.dataIndex ?? 0;
+            const row = cohort[i];
+            if(!row) return '';
+            return [
+              `Criados na safra: ${row.total}`,
+              `Resolvidos no mesmo mês: ${row.sameMonth}`,
+              `Resolvidos no mês seguinte: ${row.nextMonth}`,
+              `Resolvidos depois / em aberto: ${row.otherOrOpen}`,
+              'Referência: Data Combinada (Transação+Criação)'
+            ];
+          }
+        }
+      }
+    },
+    scales:{
+      x:{stacked:true,ticks:{font:{size:10}}},
+      y:{stacked:true,beginAtZero:true,ticks:{font:{size:11}}}
+    }
+  }
+});
+} else {
+  const cohortCanvas = document.getElementById('chCohort');
+  if (cohortCanvas) {
+    const card = cohortCanvas.closest('.chart-card');
+    if (card) card.innerHTML = '<h3 class="chart-title">Safra de Resolução — Total, Mesmo Mês e Mês Seguinte</h3><div style="color:var(--muted-fg);font-size:0.8rem;padding:1rem 0">Nenhum caso encontrado para o filtro específico da safra.</div>';
+  }
+}
 
   makeChart('chWorkload',{type:'bar',data:{labels:wlSorted.map(w=>w[0].split(' ').slice(0,2).join(' ')),datasets:[{data:wlSorted.map(w=>w[1]),backgroundColor:'hsla(215,35%,62%,0.60)'}]},options:{plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{ticks:{font:{size:9},maxRotation:20}},y:{ticks:{font:{size:11}}}}}});
 
-  makeChart('chSla',{type:'bar',data:{labels:['Estourado','Em Risco','No Prazo'],datasets:[{data:[breached,warning,ok],backgroundColor:['hsl(0,70%,60%)','hsl(38,90%,62%)','hsl(142,45%,55%)']}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}});
+makeChart('chSla',{type:'bar',data:{labels:['Estourado','Em Risco','No Prazo'],datasets:[{data:[breached,warning,ok],backgroundColor:['hsl(0,70%,60%)','hsl(38,90%,62%)','hsl(142,45%,55%)']}]},options:{plugins:{legend:{display:false}}}});
 
-  makeChart('chStatus',{type:'bar',data:{labels:['Abertos','COAF','Concluídos'],datasets:[{data:[statusD.open,statusD.coaf,statusD.closed],backgroundColor:['hsl(217,60%,62%)','hsl(263,45%,64%)','hsl(142,45%,55%)']}]},options:{plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}});
+  makeChart('chStatus',{type:'bar',data:{labels:['Abertos','COAF','Concluídos'],datasets:[{data:[statusD.open,statusD.coaf,statusD.closed],backgroundColor:['hsl(217,60%,62%)','hsl(263,45%,64%)','hsl(142,45%,55%)']}]},options:{plugins:{legend:{display:false}}}});
 
   makeChart('chRes',{type:'line',data:{labels:resTrend.map(r=>r.month),datasets:[{label:'Dias',data:resTrend.map(r=>r.avg),borderColor:'hsl(263,45%,64%)',backgroundColor:'hsl(263,45%,64%)',pointRadius:3,tension:0.3}]},options:{plugins:{legend:{display:false},datalabels:{display:true}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:11}}}}}});
 }
@@ -1044,31 +1820,108 @@ function getResTrend(cases){
   return[...m.entries()].sort(([a],[b])=>a.localeCompare(b)).map(([month,days])=>({month,avg:Math.round(days.reduce((s,d)=>s+d,0)/days.length)}));
 }
 
-// ==================== RENDER PERSON PANEL ====================
+function formatMonthKeyLabel(monthKey){
+  const [year, month] = String(monthKey).split('-');
+  return `${month}/${year}`;
+}
+
+function getResolutionCohort(cases){
+  const m = new Map();
+  cases.forEach(c => {
+    const refDate = getCombinedDate(c);
+    if(!refDate) return;
+    const created = new Date(refDate);
+    if(isNaN(created)) return;
+    const createdKey = created.getFullYear() + '-' + String(created.getMonth()+1).padStart(2,'0');
+    const entry = m.get(createdKey) || { total:0, sameMonth:0, nextMonth:0, otherOrOpen:0 };
+    entry.total++;
+
+    if(c.resolvido){
+      const resolved = new Date(c.resolvido);
+      if(!isNaN(resolved)){
+        const diffMonths = (resolved.getFullYear() - created.getFullYear()) * 12 + (resolved.getMonth() - created.getMonth());
+        if(diffMonths === 0) entry.sameMonth++;
+        else if(diffMonths === 1) entry.nextMonth++;
+        else entry.otherOrOpen++;
+      } else {
+        entry.otherOrOpen++;
+      }
+    } else {
+      entry.otherOrOpen++;
+    }
+    m.set(createdKey, entry);
+  });
+  return [...m.entries()]
+    .sort(([a],[b]) => a.localeCompare(b))
+    .map(([month, d]) => ({ month, monthLabel: formatMonthKeyLabel(month), ...d }));
+}
+
+// ==================== RENDER PERSON PANEL (com todas as colunas ordenáveis) ====================
 function renderPersonPanel(cases){
   const panel=document.getElementById('personPanel');
   const corr=buildPersonCorrelations(cases);
   let filtered=corr;
   if(personSearch){const s=personSearch.toLowerCase();filtered=filtered.filter(p=>p.identifier.includes(s))}
-  filtered.sort((a,b)=>b[personSortBy]-a[personSortBy]);
-  const reincidentes=filtered.filter(p=>p.totalCases>=2);
-  const totalWithCoaf=filtered.filter(p=>p.coafCases>0).length;
-  const totalRecent=filtered.filter(p=>p.coafInLast6Months).length;
-  const showList=reincidentes.length>0?reincidentes:filtered;
+  
+  // Função de ordenação genérica
+  function sortPersons(a, b, field, dir) {
+    let valA = a[field];
+    let valB = b[field];
+    if (field === 'firstCaseDate' || field === 'lastCaseDate' || field === 'lastCoafDate') {
+      valA = valA ? new Date(valA).getTime() : -Infinity;
+      valB = valB ? new Date(valB).getTime() : -Infinity;
+    } else if (field === 'riskLevel') {
+      const riskOrder = { Alto: 3, Médio: 2, Baixo: 1 };
+      valA = riskOrder[valA] || 0;
+      valB = riskOrder[valB] || 0;
+    } else if (typeof valA === 'string') {
+      valA = valA.toLowerCase();
+      valB = valB.toLowerCase();
+    }
+    if (valA === valB) return 0;
+    const cmp = valA > valB ? 1 : -1;
+    return dir === 'asc' ? cmp : -cmp;
+  }
+  
+  // Verifica se temos um campo de ordenação atual (salvo em personSortField)
+  if (!window.personSortField) window.personSortField = 'totalCases';
+  if (!window.personSortDir) window.personSortDir = 'desc';
+  filtered.sort((a,b) => sortPersons(a, b, window.personSortField, window.personSortDir));
+  
+  const reincidentes = filtered.filter(p=>p.totalCases>=2);
+  const totalWithCoaf = filtered.filter(p=>p.coafCases>0).length;
+  const totalRecent = filtered.filter(p=>p.coafInLast6Months).length;
+  const showList = reincidentes.length>0?reincidentes:filtered;
 
   const tableWrap = document.querySelector('#personPanel .table-wrap');
   const scrollPosition = tableWrap ? tableWrap.scrollTop : 0;
+
+  // Gera seta de ordenação
+  function sortArrow(field) {
+    if (window.personSortField === field) {
+      return window.personSortDir === 'asc' ? ' ▲' : ' ▼';
+    }
+    return ' ⇅';
+  }
 
   let h=`<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:0.75rem;margin-bottom:1rem">
     <div><h3 class="chart-title" style="margin-bottom:0">Correlação por CPF / Pessoa</h3>
     <p class="subtitle" style="margin-top:0.25rem">${corr.length} pessoas · ${reincidentes.length} reincidentes · ${totalWithCoaf} com COAF · ${totalRecent} COAF &lt;6 meses</p></div>
     <div style="display:flex;gap:0.5rem">
       <input type="text" class="filter-input" style="width:180px" placeholder="Buscar CPF..." value="${personSearch}" oninput="personSearch=this.value;renderAll()">
-      <select class="filter-select" onchange="personSortBy=this.value;renderAll()"><option value="totalCases"${personSortBy==='totalCases'?' selected':''}>Total</option><option value="openCases"${personSortBy==='openCases'?' selected':''}>Abertos</option><option value="coafCases"${personSortBy==='coafCases'?' selected':''}>COAF</option></select>
     </div></div>`;
   h+=`<div class="person-summary"><div class="mini-kpi"><div class="val">${corr.length}</div><div class="lbl">Pessoas</div></div><div class="mini-kpi"><div class="val" style="color:var(--risk-high)">${reincidentes.length}</div><div class="lbl">Reincidentes</div></div><div class="mini-kpi"><div class="val" style="color:var(--coaf)">${totalWithCoaf}</div><div class="lbl">Com COAF</div></div><div class="mini-kpi"><div class="val" style="color:var(--risk-med)">${totalRecent}</div><div class="lbl">COAF &lt;6m</div></div></div>`;
   h+=`<div class="table-wrap" style="max-height:360px;overflow-y:auto"><table class="data-table"><thead style="position:sticky;top:0;background:var(--card);z-index:5">
-    <th>CPF/Email</th><th>Total</th><th>Abertos</th><th>Encerrados</th><th>COAF</th><th>Último COAF</th><th>COAF &lt;6m</th><th>Risco</th><th>Primeiro Caso</th><th>Último Caso</th>
+    <th onclick="window.personSortField='identifier'; window.personSortDir=(window.personSortField==='identifier' && window.personSortDir==='asc')?'desc':'asc'; renderAll()">CPF/Email${sortArrow('identifier')}</th>
+    <th onclick="window.personSortField='totalCases'; window.personSortDir=(window.personSortField==='totalCases' && window.personSortDir==='asc')?'desc':'asc'; renderAll()">Total${sortArrow('totalCases')}</th>
+    <th onclick="window.personSortField='openCases'; window.personSortDir=(window.personSortField==='openCases' && window.personSortDir==='asc')?'desc':'asc'; renderAll()">Abertos${sortArrow('openCases')}</th>
+    <th onclick="window.personSortField='closedCases'; window.personSortDir=(window.personSortField==='closedCases' && window.personSortDir==='asc')?'desc':'asc'; renderAll()">Encerrados${sortArrow('closedCases')}</th>
+    <th onclick="window.personSortField='coafCases'; window.personSortDir=(window.personSortField==='coafCases' && window.personSortDir==='asc')?'desc':'asc'; renderAll()">COAF${sortArrow('coafCases')}</th>
+    <th onclick="window.personSortField='lastCoafDate'; window.personSortDir=(window.personSortField==='lastCoafDate' && window.personSortDir==='asc')?'desc':'asc'; renderAll()">Último COAF${sortArrow('lastCoafDate')}</th>
+    <th onclick="window.personSortField='coafInLast6Months'; window.personSortDir=(window.personSortField==='coafInLast6Months' && window.personSortDir==='asc')?'desc':'asc'; renderAll()">COAF &lt;6m${sortArrow('coafInLast6Months')}</th>
+    <th onclick="window.personSortField='riskLevel'; window.personSortDir=(window.personSortField==='riskLevel' && window.personSortDir==='asc')?'desc':'asc'; renderAll()">Risco${sortArrow('riskLevel')}</th>
+    <th onclick="window.personSortField='firstCaseDate'; window.personSortDir=(window.personSortField==='firstCaseDate' && window.personSortDir==='asc')?'desc':'asc'; renderAll()">Primeiro Caso${sortArrow('firstCaseDate')}</th>
+    <th onclick="window.personSortField='lastCaseDate'; window.personSortDir=(window.personSortField==='lastCaseDate' && window.personSortDir==='asc')?'desc':'asc'; renderAll()">Último Caso${sortArrow('lastCaseDate')}</th>
     </thead><tbody>`;
   
   showList.slice(0,100).forEach(p=>{
@@ -1077,16 +1930,16 @@ function renderPersonPanel(cases){
     const isExpanded = expandedPerson === p.identifier;
     
     h+=`<tr style="cursor:pointer" onclick="expandedPerson=expandedPerson==='${p.identifier}'?null:'${p.identifier}';renderAll()">
-      <td class="mono-id">${displayId}    </td>
-      <td style="font-weight:700">${p.totalCases}    </td>
-      <td><span class="badge badge-status-open">${p.openCases}</span>    </td>
-      <td><span class="badge badge-status-done">${p.closedCases}</span>    </td>
-      <td>${p.coafCases>0?`<span class="badge badge-coaf">${p.coafCases}</span>`:'—'}    </td>
-      <td>${fmtDate(p.lastCoafDate)}    </td>
-      <td>${p.coafCases>0?(p.coafInLast6Months?'<span class="badge badge-risk-high">⚠ Sim</span>':'<span class="badge badge-risk-low">Não</span>'):'—'}    </td>
-      <td><span class="badge ${rClass}">${p.riskLevel}</span>    </td>
-      <td>${fmtDate(p.firstCaseDate)}    </td>
-      <td>${fmtDate(p.lastCaseDate)}    </td>
+      <td class="mono-id">${displayId}</td>
+      <td style="font-weight:700">${p.totalCases}</td>
+      <td><span class="badge badge-status-open">${p.openCases}</span></td>
+      <td><span class="badge badge-status-done">${p.closedCases}</span></td>
+      <td>${p.coafCases>0?`<span class="badge badge-coaf">${p.coafCases}</span>`:'—'}</td>
+      <td>${fmtDate(p.lastCoafDate)}</td>
+      <td>${p.coafCases>0?(p.coafInLast6Months?'<span class="badge badge-risk-high">⚠ Sim</span>':'<span class="badge badge-risk-low">Não</span>'):'—'}</td>
+      <td><span class="badge ${rClass}">${p.riskLevel}</span></td>
+      <td>${fmtDate(p.firstCaseDate)}</td>
+      <td>${fmtDate(p.lastCaseDate)}</td>
      </tr>`;
     
     if(isExpanded){
@@ -1110,7 +1963,8 @@ function renderPersonPanel(cases){
         </div>`;
       });
       
-      h+=`</div></div>    </td>   </tr>`;
+      h+=`</div></div>        </td>
+      </tr>`;
     }
   });
   
@@ -1146,7 +2000,7 @@ function renderTable(cases){
   const safePage=Math.min(tablePage,Math.max(0,totalPages-1));
   const pageData=sorted.slice(safePage*PAGE_SIZE,(safePage+1)*PAGE_SIZE);
 
-  const cols=[{f:'id',l:'ID'},{f:'tipo',l:'Tipo'},{f:'resumo',l:'Resumo'},{f:'status',l:'Status'},{f:'responsavel',l:'Responsável'},{f:'risco',l:'Risco'},{f:'sla',l:'SLA'},{f:'data_transacao_pld',l:'Data Transação - PLD'},{f:'criado',l:'Criado'},{f:'resolvido',l:'Resolvido'}];
+  const cols=[{f:'id',l:'ID'},{f:'tipo',l:'Tipo'},{f:'resumo',l:'Resumo'},{f:'status',l:'Status'},{f:'responsavel',l:'Responsável'},{f:'risco',l:'Risco'},{f:'sla',l:'SLA'},{f:'data_transacao_pld',l:'Data Transação'},{f:'criado',l:'Criado'},{f:'resolvido',l:'Resolvido'}];
   const arrow=f=>tableSortField===f?(tableSortDir==='desc'?'▼':'▲'):'⇅';
 
   let h=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem"><h3 class="chart-title" style="margin-bottom:0">Tabela Detalhada (${fmtNum(cases.length)} casos)</h3><div class="pagination">Pág. ${safePage+1} de ${totalPages} <button onclick="tablePage=Math.max(0,tablePage-1);renderAll()" ${safePage===0?'disabled':''}>‹</button><button onclick="tablePage=Math.min(${totalPages-1},tablePage+1);renderAll()" ${safePage>=totalPages-1?'disabled':''}>›</button></div></div>`;
@@ -1167,216 +2021,13 @@ function renderTable(cases){
       <td>${c.responsavel||'—'}</td>
       <td><span class="badge ${rBadge}">${c.risco}</span></td>
       <td><span class="badge ${slaDisplay.badge}" title="${slaDisplay.tooltip}">${slaDisplay.display}</span></td>
-      <td>${fmtDate(c.data_transacao_pld)}</td>
-      <td>${fmtDate(c.criado)}</td>
-      <td>${fmtDate(c.resolvido)}</td>
-    </tr>`;
+      <td style="white-space:nowrap">${fmtDate(c.data_transacao_pld)}</td>
+      <td style="white-space:nowrap">${fmtDate(c.criado)}</td>
+      <td style="white-space:nowrap">${fmtDate(c.resolvido)}</td>
+     </tr>`;
   });
   h+=`</tbody></table></div>`;
   panel.innerHTML=h;
-}
-
-// ==================== BUILD PERSON CORRELATIONS ====================
-function buildPersonCorrelations(cases) {
-  const people = new Map();          
-  const emailToCpf = new Map();      
-
-  function getOrCreateCPF(cpf) {
-    if (!people.has(cpf)) {
-      people.set(cpf, {
-        identifier: cpf,
-        type: 'cpf',
-        cases: [],
-        emails: new Set()
-      });
-    }
-    return people.get(cpf);
-  }
-
-  function getOrCreateEmail(email) {
-    if (!people.has(email)) {
-      people.set(email, {
-        identifier: email,
-        type: 'email',
-        cases: []
-      });
-    }
-    return people.get(email);
-  }
-
-  for (const c of cases) {
-    const cpf = extractCPF(c.resumo);
-    const email = c.emailP || extractEmail(c.resumo);
-
-    if (cpf && email) {
-      const person = getOrCreateCPF(cpf);
-      person.cases.push(c);
-      person.emails.add(email);
-      emailToCpf.set(email, cpf);
-      continue;
-    }
-
-    if (cpf) {
-      getOrCreateCPF(cpf).cases.push(c);
-      continue;
-    }
-
-    if (email) {
-      if (emailToCpf.has(email)) {
-        people.get(emailToCpf.get(email)).cases.push(c);
-      } else {
-        getOrCreateEmail(email).cases.push(c);
-      }
-    }
-  }
-
-  const sixAgo = new Date();
-  sixAgo.setMonth(sixAgo.getMonth() - 6);
-
-  const corr = [];
-
-  for (const person of people.values()) {
-    const casesList = person.cases;
-    if (!casesList.length) continue;
-
-    const open = casesList.filter(c => isOpen(c.status)).length;
-    const closed = casesList.filter(c => !isOpen(c.status) && !isCoaf(c.status)).length;
-    const coafCases = casesList.filter(c => isCoaf(c.status));
-    const hiCount = casesList.filter(c => c.risco === "Alto").length;
-
-    const allDates = casesList
-      .map(c => c.criado)
-      .filter(Boolean)
-      .map(d => new Date(d))
-      .sort((a, b) => a - b);
-
-    const coafDates = coafCases
-      .map(c => c.atualizado || c.criado)
-      .filter(Boolean)
-      .map(d => new Date(d))
-      .sort((a, b) => b - a);
-
-    corr.push({
-      identifier: person.identifier,
-      type: person.type,
-      totalCases: casesList.length,
-      openCases: open,
-      closedCases: closed,
-      coafCases: coafCases.length,
-      coafInLast6Months: coafDates.some(d => d >= sixAgo),
-      lastCoafDate: coafDates.length ? coafDates[0].toISOString() : null,
-      cases: casesList,
-      riskLevel:
-        hiCount > casesList.length / 2
-          ? "Alto"
-          : casesList.some(c => c.risco === "Médio")
-          ? "Médio"
-          : "Baixo",
-      firstCaseDate: allDates.length ? allDates[0].toISOString() : null,
-      lastCaseDate: allDates.length ? allDates[allDates.length - 1].toISOString() : null
-    });
-  }
-
-  return corr.sort((a, b) => b.totalCases - a.totalCases);
-}
-
-// ==================== SLA ALERTS ====================
-function getSlaAlerts(cases){
-  const alerts = {
-    expired: [],
-    today: [],
-    soon: []
-  };
-  
-  cases.forEach(c => {
-    if(!isOpen(c.status)) return;
-    const remaining = getSlaRemainingDays(c);
-    if(remaining === null) return;
-    
-    if(remaining < 0){
-      alerts.expired.push({...c, remainingDays: remaining});
-    } else if(remaining === 0){
-      alerts.today.push({...c, remainingDays: remaining});
-    } else if(remaining >= 2 && remaining <= 5){
-      alerts.soon.push({...c, remainingDays: remaining});
-    }
-  });
-  
-  alerts.expired.sort((a,b) => a.remainingDays - b.remainingDays);
-  alerts.today.sort((a,b) => (a.criado || '').localeCompare(b.criado || ''));
-  alerts.soon.sort((a,b) => a.remainingDays - b.remainingDays);
-  
-  return alerts;
-}
-
-function renderSlaAlerts(cases){
-  const alerts = getSlaAlerts(cases);
-  const panel = document.getElementById('slaAlertsPanel');
-  if(!panel) return;
-  
-  const formatAlertItem = (c) => {
-    const rBadge = c.risco === 'Alto' ? 'badge-risk-high' : c.risco === 'Médio' ? 'badge-risk-med' : 'badge-risk-low';
-    const isKYP = c.tipo === "KYP / Background Check" || c.tipo === "KYP / Monitoramento" || c.tipo === "KYP Afiliados";
-    const remainingClass = c.remainingDays < 0 ? 'badge-sla-critical' : (c.remainingDays <= 2 ? 'badge-sla-warning' : '');
-    const dataVencimento = getDataVencimento(c);
-    const dataVencimentoStr = dataVencimento ? dataVencimento.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" }) : null;
-    const tooltip = dataVencimentoStr ? `Vence em: ${dataVencimentoStr}` : '';
-    
-    let remainingText;
-    if (c.remainingDays < 0) {
-      remainingText = `${Math.abs(c.remainingDays)} dia(s) ${isKYP ? 'útil(is)' : ''} atrasado`;
-    } else if (c.remainingDays === 0) {
-      remainingText = `Vence hoje`;
-    } else {
-      remainingText = `${c.remainingDays} dia(s) ${isKYP ? 'útil(is)' : ''} restante(s)`;
-    }
-    
-    return `
-      <div class="sla-alert-item ${c.remainingDays < 0 ? 'sla-critical' : (c.remainingDays <= 2 ? 'sla-warning' : '')}">
-        <div style="flex:1; min-width:0">
-          <a href="${JIRA_BASE_URL}${c.id}" target="_blank" class="mono-id" style="font-size:11px">${c.id}</a>
-          <div style="font-size:0.7rem; color:var(--muted-fg); margin-top:2px">${c.responsavel || 'Sem responsável'} | ${c.tipo}</div>
-        </div>
-        <div style="text-align:right">
-          <span class="badge ${rBadge}" style="font-size:0.65rem">${c.risco}</span>
-          <span class="badge-sla-days ${remainingClass}" style="margin-left:6px" title="${tooltip}">${remainingText}</span>
-        </div>
-      </div>
-    `;
-  };
-  
-  panel.innerHTML = `
-    <div class="sla-alert-card">
-      <div class="sla-alert-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <span>Vencidos</span>
-        <span class="badge badge-risk-high">${alerts.expired.length}</span>
-      </div>
-      <div class="sla-alert-list">
-        ${alerts.expired.length === 0 ? '<div class="empty-message">Nenhum caso vencido</div>' : alerts.expired.map(formatAlertItem).join('')}
-      </div>
-    </div>
-    <div class="sla-alert-card">
-      <div class="sla-alert-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4l2 2"/><circle cx="12" cy="12" r="10"/><path d="M12 3v2"/><path d="M12 19v2"/><path d="M3 12h2"/><path d="M19 12h2"/></svg>
-        <span>Vencem Hoje</span>
-        <span class="badge badge-risk-med">${alerts.today.length}</span>
-      </div>
-      <div class="sla-alert-list">
-        ${alerts.today.length === 0 ? '<div class="empty-message">Nenhum caso vence hoje</div>' : alerts.today.map(formatAlertItem).join('')}
-      </div>
-    </div>
-    <div class="sla-alert-card">
-      <div class="sla-alert-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span>Próximos Dias (2-5)</span>
-        <span class="badge badge-risk-low">${alerts.soon.length}</span>
-      </div>
-      <div class="sla-alert-list">
-        ${alerts.soon.length === 0 ? '<div class="empty-message">Nenhum caso vencendo nos próximos dias</div>' : alerts.soon.map(formatAlertItem).join('')}
-      </div>
-    </div>
-  `;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1480,6 +2131,23 @@ if (document.readyState === 'loading'){
   document.addEventListener('DOMContentLoaded', applyChartThemeColors);
 } else {
   applyChartThemeColors();
+}
+
+// ==================== SWITCH TAB ====================
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabId));
+  document.querySelectorAll('.tab-content').forEach(content => content.classList.toggle('active', content.id === `tab-${tabId}`));
+}
+
+function bindTabs(){
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.onclick = () => switchTab(btn.dataset.tab);
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindTabs);
+} else {
+  bindTabs();
 }
 </script>
 </body>
